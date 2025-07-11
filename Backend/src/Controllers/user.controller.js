@@ -23,9 +23,6 @@ const generateRefreshAndAccessToken = async (userId) => {
 
 const registerUser = asyncHandler(async (req, res) => {
 
-    //8. once the data is saved, generate and send the mail for email verification token
-    //9. remove the password and token from the userdata and send it as json response
-
     const { fullname, email, password } = req.body
 
     const existingUser = await User.findOne({ email })
