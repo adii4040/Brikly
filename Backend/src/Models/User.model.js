@@ -116,6 +116,16 @@ userSchema.methods.generateRandomToken = function () {
     return { unhashedToken, hashedToken, hashedTokenExpiry }
 }
 
+userSchema.methods.isRefreshTokenValid = function (token) {
+    const user = this
+    if (!user.refreshToken) return false
+    const isValid = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET_KEY, (err, decoded) => {
+        if (err) return false
+        return decoded._id === user._id.toString()
+    })
+    return isValid
+}
+
 
 
 const User = new mongoose.model('User', userSchema)

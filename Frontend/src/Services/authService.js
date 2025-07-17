@@ -1,0 +1,70 @@
+import { registerUrl, loginUrl, currentUserUrl } from "./routes"
+
+
+
+const registerUser = async (formData) => {
+    const res = await fetch(registerUrl, {
+        method: 'POST',
+        body: formData,
+        credentials: "include"
+    })
+
+    const contentType = res.headers.get("content-type")
+    if (!res.ok) {
+        const errorData = contentType && contentType.includes('application/json') ? await res.json() : { error: await res.text() }
+        console.error('❌ Backend error:', errorData.message)
+        throw new Error(errorData.message || "Login Failed")
+    }
+
+    const data = await res.json()
+    return data
+}
+
+const loginUser = async (formData) => {
+    const res = await fetch(loginUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+        credentials: "include"
+    })
+
+    const contentType = res.headers.get('content-type')
+
+    if (!res.ok) {
+        const errorData = contentType && contentType.includes('application/json') ? await res.json() : { error: await res.text() }
+        console.error('❌ Backend error:', errorData.message)
+        throw new Error(errorData.message || "Login Failed")
+    }
+
+    const data = await res.json();
+    return data
+}
+
+const currentUser = async () => {
+    res = await fetch(currentUserUrl, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: "include"
+    })
+
+    const contentType = res.headers.get('content-type')
+    if (!res.ok) {
+        const errorData = contentType && contentType.includes('application/json') ? await res.json() : { error: await res.text() }
+        console.log('❌ Backend error:', errorData.message)
+        throw new Error(errorData.message || "Failed to fetch current user!!")
+    }
+
+    const data = await res.json()
+    return data
+}
+
+
+export {
+    registerUser,
+    loginUser,
+    currentUser
+}

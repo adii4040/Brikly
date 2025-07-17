@@ -3,7 +3,7 @@ import * as z from "zod";
 
 const emailValidation = z.object({
     email: z
-        .email({ message: "Inavlid Email" })
+        .email({ message: "Invalid Email" })
         .trim(),
 })
 

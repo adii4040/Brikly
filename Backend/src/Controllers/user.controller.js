@@ -22,7 +22,6 @@ const generateRefreshAndAccessToken = async (userId) => {
 
 
 const registerUser = asyncHandler(async (req, res) => {
-
     const { fullname, email, password } = req.body
 
     const existingUser = await User.findOne({ email })
@@ -71,13 +70,9 @@ const registerUser = asyncHandler(async (req, res) => {
         )
     )
 
-
-
-
 })
 
 const loginUser = asyncHandler(async (req, res) => {
-
     const { email, password } = req.body
 
     const user = await User.findOne({ email })
@@ -145,12 +140,18 @@ const verifyEmail = asyncHandler(async (req, res) => {
     user.isEmailVerified = true
     await user.save({ validateBeforeSave: false })
 
-    return res.status(200).json(new ApiResponse(200, {}, "Email has been verfied!!"))
+    return res.status(200)
+        .json(
+            new ApiResponse(
+                200,
+                {},
+                "Email has been verfied!!"
+            )
+        )
 
 })
 
 const resendEmailVerification = asyncHandler(async (req, res) => {
-
     if (req.user.isEmailVerified) throw new ApiError(401, "User Email is already verified")
 
     const { hashedToken, hashedTokenExpiry } = await req.user.generateRandomToken()
@@ -171,7 +172,11 @@ const resendEmailVerification = asyncHandler(async (req, res) => {
     sendMail(mailOptions)
 
     return res.status(200).json(
-        new ApiResponse(200, {}, "Email verification code sent successfully!")
+        new ApiResponse(
+            200,
+            {},
+            "Email verification code sent successfully!"
+        )
     )
 })
 
@@ -201,7 +206,11 @@ const forgotPasswordRequest = asyncHandler(async (req, res) => {
     return res
         .status(200)
         .json(
-            new ApiResponse(200, {}, "Forget Password link send successfully!!")
+            new ApiResponse(
+                200,
+                {},
+                "Forget Password link send successfully!!"
+            )
         )
 })
 
@@ -219,7 +228,13 @@ const resetForgotPassword = asyncHandler(async (req, res) => {
     user.forgotPasswordTokenExpiry = undefined
     await user.save({ validateBeforeSave: false })
 
-    return res.status(200).json(new ApiResponse(200, {}, "Password has been changed"))
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            {},
+            "Password has been changed"
+        )
+    )
 })
 
 const resetCurrentPassword = asyncHandler(async (req, res) => {
@@ -235,7 +250,14 @@ const resetCurrentPassword = asyncHandler(async (req, res) => {
     await req.user.save({ validateBeforeSave: false })
 
 
-    return res.status(200).json(new ApiResponse(200, {}, "Password has been changed"))
+    return res.status(200)
+        .json(
+            new ApiResponse(
+                200,
+                {},
+                "Password has been changed"
+            )
+        )
 })
 
 const updateUser = asyncHandler(async (req, res) => {
@@ -245,7 +267,7 @@ const updateUser = asyncHandler(async (req, res) => {
 
     const user = await User.findById(req.user._id)
     if (!user) throw new ApiError(404, "User not found!!")
-        
+
     if (fullname) {
         user.fullname = fullname
     }
@@ -296,7 +318,7 @@ const updateUser = asyncHandler(async (req, res) => {
     await user.save({ validateBeforeSave: false })
 
     const updatedUser = await User.findById(user._id).select(" -password -refreshToken -forgotPasswordToken -forgotPasswordTokenExpiry -emailVerificationToken -emailVerificationTokenExpiry")
-    
+
     return res.status(200).json(
         new ApiResponse(
             200,
@@ -306,6 +328,27 @@ const updateUser = asyncHandler(async (req, res) => {
     )
 })
 
+
+const refreshAccessToken = asyncHandler(async (req, res) => {
+    const { refreshToken } = req.cookies
+    if (!refreshToken) throw new ApiError(401, "No refresh token found")
+
+    const user = await User.findOne({ refreshToken })
+    if (!user) throw new ApiError(403, "Invalid refresh token")
+        
+    const isRefreshTokenValid = await user.isRefreshTokenValid(refreshToken)
+    if (!isRefreshTokenValid) throw new ApiError(403, "Invalid refresh token")
+    const accessToken = await user.generateAccessToken(user)
+    return res.status(200)
+        .cookie("accessToken", accessToken, cookieOption)
+        .json(
+            new ApiResponse(
+                200,
+                {},
+                "Access token refreshed successfully!!"
+            )
+        )
+})
 
 export {
     registerUser,
