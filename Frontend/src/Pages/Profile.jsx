@@ -3,8 +3,32 @@ import { Link } from 'react-router-dom'
 import Apartment from '../Components/Apartment'
 import { listData } from '../lib/dummyData'
 import ChatContainer from '../Components/ChatContainer'
+
+import { logoutUser } from '../Services/authService'
+import { useMutation } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
+
+
 function Profile() {
   const data = listData
+  const navigate = useNavigate()
+
+  const logoutUserMutation = useMutation({
+    mutationFn: async () => {
+      const data = await logoutUser()
+      return data
+    },
+
+    onSuccess: (data) => {
+      console.log(data)
+      navigate('/login')
+    },
+
+    onError: (error) => {
+      throw new Error(error)
+    }
+  })
+
 
   return (
     <div className='w-full h-contentheight px-5 md:px-0 flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden scrollbar-hide'>
@@ -19,6 +43,7 @@ function Profile() {
             <p className='flex items-center gap-3 text-sm'>Avatar:<img src="https://toppng.com/uploads/preview/cool-avatar-transparent-image-cool-boy-avatar-11562893383qsirclznyw.png" alt="" className='w-7 h-7 rounded-full' /></p>
             <p className='text-sm flex items-center gap-3'>Username: <span className='text-base font-semibold'>Aditya Singh</span></p>
             <p className='text-sm flex items-center gap-3'>E-mail: <span className='text-base font-semibold'>aditya@gmail.com</span></p>
+            <button className='w-20 p-1 rounded-md  block bg-orange-400 hover:bg-orange-300 cursor-pointer' onClick={() => logoutUserMutation.mutate() }>Log out</button>
           </div>
         </div>
         <div className="userList pt-5">

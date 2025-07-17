@@ -1,4 +1,4 @@
-import { registerUrl, loginUrl, currentUserUrl } from "./routes"
+import { registerUrl, loginUrl, currentUrl, logoutUrl } from "./routes"
 
 
 
@@ -43,7 +43,7 @@ const loginUser = async (formData) => {
 }
 
 const currentUser = async () => {
-    res = await fetch(currentUserUrl, {
+    res = await fetch(currentUrl, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -62,9 +62,28 @@ const currentUser = async () => {
     return data
 }
 
+const logoutUser = async () => {
+    const res = await fetch(logoutUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'},
+        credentials: 'include'
+    })
+
+    if (!res.ok) {
+        const errorData = await res.json()
+        console.error('❌ Backend error:', errorData)
+        throw new Error(errorData.message || "Failed to logout current user!!")
+    }
+
+    const data = await res.json()
+    return data
+}
+
 
 export {
     registerUser,
     loginUser,
-    currentUser
+    currentUser,
+    logoutUser
 }
