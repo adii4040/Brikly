@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react'
 
-import { loginUser, currentUser } from '../Services/authService'
+import { loginUser } from '../Services/authService'
 
 import { Link, useNavigate } from "react-router-dom";
-import { useQuery, useMutation } from '@tanstack/react-query'
-
+import { useQuery, useMutation, QueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 
 
 function Login() {
 
   const navigate = useNavigate();
+
+  const queryClient = useQueryClient()
 
 
   const [form, setForm] = useState({
@@ -19,20 +21,6 @@ function Login() {
 
 
 
-
-  const { data } = useQuery({
-    queryKey: ["logedinUserData"],
-    queryFn: async () => {
-      const data = await fetch(currentUser)
-      if (!data.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return data.json();
-
-    }
-  })
-
-
   const loginUserMutation = useMutation({
     mutationFn: async (formData) => {
       const data = await loginUser(formData)
@@ -40,9 +28,10 @@ function Login() {
     },
     onSuccess: (data) => {
       console.log("Login successful:", data);
-      setTimeout(() => {
-        navigate("/home");
-      }, 1500)
+
+      queryClient.invalidateQueries({ queryKey: ['currentUser'] }).then(() => {
+        navigate('/home');
+      });
     },
     onError: (error) => {
       console.error("Login failed:", error.message);
@@ -93,12 +82,12 @@ function Login() {
         </form>
 
 
-        {/* <div className='pt-5 flex justify-between text-white '>
-          <h1 onClick={requestEmailForm} >Forget Password?</h1>
+        <div className='pt-5 flex justify-between text-white '>
+          <h1 >Forget Password?</h1>
           <p>Dont have an account? <Link to={'/signup'} className='text-blue-500'>SIGN UP</Link> </p>
         </div>
 
-        {
+        {/* {
           isForgot && <ForgetPasswordEmailVerifyForm setMessage={setMessage} closeForm={closeForm} />
         } */}
 

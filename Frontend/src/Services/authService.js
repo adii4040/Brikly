@@ -42,31 +42,24 @@ const loginUser = async (formData) => {
     return data
 }
 
-const currentUser = async () => {
-    res = await fetch(currentUrl, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+const fetchCurrentUser = async () => {
+    const res = await fetch(currentUrl, {
         credentials: "include"
     })
 
-    const contentType = res.headers.get('content-type')
-    if (!res.ok) {
-        const errorData = contentType && contentType.includes('application/json') ? await res.json() : { error: await res.text() }
-        console.log('❌ Backend error:', errorData.message)
-        throw new Error(errorData.message || "Failed to fetch current user!!")
+    
+    if(!res.ok) {
+        throw new Error('Failed to fetch user');
     }
-
-    const data = await res.json()
-    return data
+    return res.json();
 }
 
 const logoutUser = async () => {
     const res = await fetch(logoutUrl, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'},
+            'Content-Type': 'application/json'
+        },
         credentials: 'include'
     })
 
@@ -84,6 +77,6 @@ const logoutUser = async () => {
 export {
     registerUser,
     loginUser,
-    currentUser,
+    fetchCurrentUser,
     logoutUser
 }

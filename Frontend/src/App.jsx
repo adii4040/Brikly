@@ -1,7 +1,11 @@
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, Navigate } from 'react-router-dom'
 import Layout from './Components/Layout'
 import { Home, Login, Signup, Single, List, Profile, Update, AddPost } from './Pages/index'
+import { useFetchCurrentUser } from './hooks/useFetchCurrentUser';
+
+
 function App() {
+
 
   return (
     <>
@@ -12,7 +16,7 @@ function App() {
           <Route path='/list' element={<List />} />
           <Route path='/:id' element={<Single />} />
           <Route path='/user/profile' element={<Profile />} />
-          <Route path='/user/update' element={<Update />} />
+          <Route path='/user/update' element={  <Update />} />
           <Route path='/user/add-post' element={<AddPost />} />
         </Route>
 
@@ -20,7 +24,8 @@ function App() {
         <Route path='/Signup' element={<Signup />} />
       </Routes>
     </>
-  
-)}
+
+  )
+}
 
 export default App

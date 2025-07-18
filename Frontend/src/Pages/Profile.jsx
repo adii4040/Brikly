@@ -4,32 +4,23 @@ import Apartment from '../Components/Apartment'
 import { listData } from '../lib/dummyData'
 import ChatContainer from '../Components/ChatContainer'
 
-import { logoutUser } from '../Services/authService'
-import { useMutation } from '@tanstack/react-query'
+
 import { useNavigate } from 'react-router-dom'
+import { useFetchCurrentUser } from '../hooks/useFetchCurrentUser'
 
 
 function Profile() {
   const data = listData
   const navigate = useNavigate()
+  const { data: userData, isLoading, isError } = useFetchCurrentUser();
 
-  const logoutUserMutation = useMutation({
-    mutationFn: async () => {
-      const data = await logoutUser()
-      return data
-    },
+  const isLoggedIn = !!userData; // or more explicitly: user !== null
 
-    onSuccess: (data) => {
-      console.log(data)
-      navigate('/login')
-    },
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Not logged in</div>;
 
-    onError: (error) => {
-      throw new Error(error)
-    }
-  })
-
-
+  const currentUser = userData?.data?.user
+  console.log(currentUser)
   return (
     <div className='w-full h-contentheight px-5 md:px-0 flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden scrollbar-hide'>
       <div className='left w-full lg:w-[60%] lg:pr-10 '>
@@ -40,10 +31,14 @@ function Profile() {
           </div>
 
           <div className='infoContainer flex flex-col gap-3'>
-            <p className='flex items-center gap-3 text-sm'>Avatar:<img src="https://toppng.com/uploads/preview/cool-avatar-transparent-image-cool-boy-avatar-11562893383qsirclznyw.png" alt="" className='w-7 h-7 rounded-full' /></p>
-            <p className='text-sm flex items-center gap-3'>Username: <span className='text-base font-semibold'>Aditya Singh</span></p>
-            <p className='text-sm flex items-center gap-3'>E-mail: <span className='text-base font-semibold'>aditya@gmail.com</span></p>
-            <button className='w-20 p-1 rounded-md  block bg-orange-400 hover:bg-orange-300 cursor-pointer' onClick={() => logoutUserMutation.mutate() }>Log out</button>
+            <p className='flex items-center gap-3 text-sm'>Avatar:<img src={currentUser ? currentUser?.avatar?.url : "https://toppng.com/uploads/preview/cool-avatar-transparent-image-cool-boy-avatar-11562893383qsirclznyw.png"} alt="" className='w-10 h-10 object-cover rounded-full' /></p>
+            <p className='text-sm flex items-center gap-3'>Username: <span className='text-base font-semibold'>{currentUser?.fullname}</span></p>
+            <p className='text-sm flex items-center gap-3'>E-mail: <span className='text-base font-semibold'>{currentUser?.email}</span></p>
+            
+              {
+                !userData.isEmailVerified ? <p className='w-24 p-1 rounded bg-orange-300' >Verify Email</p>  : <p>Verified</p>
+              }
+            
           </div>
         </div>
         <div className="userList pt-5">

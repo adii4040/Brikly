@@ -2,7 +2,15 @@ import React from 'react'
 import bg from '../../public/bg.png'
 import SearchBar from '../Components/SearchBar'
 
+import {useFetchCurrentUser} from '../hooks/useFetchCurrentUser'
+import {useSelector} from 'react-redux'
+
 function Home() {
+
+  const { userData, isLoggedIn } = useSelector((state) => state.auth)
+
+  console.log("userData",userData?.data?.user)
+  const user = userData?.data?.user
   return (
     <>
       <div className='w-full h-contentheight flex px-5 md:px-0 '>
