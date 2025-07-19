@@ -21,7 +21,7 @@ const router = Router()
 
 router.route('/register').post( upload.single("avatar") , validate(registerUserValidation, validationSource.BODY), registerUser)
 router.route('/login').post(validate(loginUserValidation, validationSource.BODY), loginUser)
-router.route('/verify-email/:emailVerificationToken').post( verifyEmail)
+router.route('/:id/verify-email/:emailVerificationToken').get( verifyEmail)
 router.route('/forgot-password').post( validate(emailValidation, validationSource.BODY), forgotPasswordRequest )
 router.route('/reset-forgot-password/:forgotPasswordToken').post( validate(resetPasswordValidation, validationSource.BODY), resetForgotPassword )
 
@@ -29,7 +29,7 @@ router.route('/reset-forgot-password/:forgotPasswordToken').post( validate(reset
 router.route('/logout').post(verifyJWT, logoutUser)
 router.route('/current-user').get(verifyJWT, getCurrentUser)
 router.route('/resend-email-verification').post(verifyJWT, resendEmailVerification)
-router.route('/reset-password').post(verifyJWT, validate(resetPasswordValidation, validationSource.BODY), resetCurrentPassword)
-router.route('/update').post(verifyJWT, upload.single("avatar"), validate(updateUserValidation, validationSource.BODY), updateUser)
+router.route('/:id/reset-password').post(verifyJWT, validate(resetPasswordValidation, validationSource.BODY), resetCurrentPassword)
+router.route('/:id/update').post(verifyJWT, upload.single("avatar"), validate(updateUserValidation, validationSource.BODY), updateUser)
 
 export default router

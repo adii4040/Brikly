@@ -116,7 +116,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 })
 
 const getCurrentUser = asyncHandler(async (req, res) => {
-    
+
     return res.status(200).json(
         new ApiResponse(
             200,
@@ -129,12 +129,13 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 })
 
 const verifyEmail = asyncHandler(async (req, res) => {
-    const { emailVerificationToken } = req.params
+    const { id, emailVerificationToken } = req.params
     if (!emailVerificationToken) throw new ApiError(401, "No email verification token")
 
-    const user = await User.findOne({ emailVerificationToken })
-    if (!user) throw new ApiError(403, "Invalid email verificaion token!")
+    const user = await User.findOne({ _id: id, emailVerificationToken })
+    if (!user) throw new ApiError(403, "User not found or invalid email verification token!")
 
+    if (user.isEmailVerified) throw new ApiError(401, "User Email is already verified")
 
     user.emailVerificationToken = undefined
     user.emailVerificationTokenExpiry = undefined
@@ -160,13 +161,14 @@ const resendEmailVerification = asyncHandler(async (req, res) => {
     req.user.emailVerificationTokenExpiry = hashedTokenExpiry
     await req.user.save({ validateBeforeSave: false })
 
+    const userId = req.user._id.toString()
     const mailOptions = {
         from: "brickly@gmail.com",
         to: req.user.email,
         subject: "Veriy Your Email",
         mailgenContent: emailVerificationMailGen(
             req.user.fullname,
-            `${process.env.BASE_URL}/user/verify-email/${hashedToken}`
+            `http://localhost:5173/user/${userId}/verify-email/${hashedToken}`
         )
     }
 
@@ -239,6 +241,9 @@ const resetForgotPassword = asyncHandler(async (req, res) => {
 })
 
 const resetCurrentPassword = asyncHandler(async (req, res) => {
+    const { id } = req.params
+    if (id !== req.user._id.toString()) throw new ApiError(403, "Unauthorized request!!")
+
     const { password } = req.body
 
     const user = await User.findById(req.user._id)
@@ -261,7 +266,12 @@ const resetCurrentPassword = asyncHandler(async (req, res) => {
         )
 })
 
+
 const updateUser = asyncHandler(async (req, res) => {
+    const { id } = req.params
+    console.log(id, req.user._id.toString())
+    if (id !== req.user._id.toString()) throw new ApiError(403, "Unauthorized request!!")
+        
     const { fullname, email } = req.body
 
     if (!fullname && !email && !req.file) throw new ApiError(400, "Atleast one field is required to update!!")
@@ -336,7 +346,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 
     const user = await User.findOne({ refreshToken })
     if (!user) throw new ApiError(403, "Invalid refresh token")
-        
+
     const isRefreshTokenValid = await user.isRefreshTokenValid(refreshToken)
     if (!isRefreshTokenValid) throw new ApiError(403, "Invalid refresh token")
     const accessToken = await user.generateAccessToken(user)
