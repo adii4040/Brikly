@@ -22,8 +22,8 @@ const router = Router()
 router.route('/register').post( upload.single("avatar") , validate(registerUserValidation, validationSource.BODY), registerUser)
 router.route('/login').post(validate(loginUserValidation, validationSource.BODY), loginUser)
 router.route('/:id/verify-email/:emailVerificationToken').get( verifyEmail)
-router.route('/forgot-password').post( validate(emailValidation, validationSource.BODY), forgotPasswordRequest )
-router.route('/reset-forgot-password/:forgotPasswordToken').post( validate(resetPasswordValidation, validationSource.BODY), resetForgotPassword )
+router.route('/request-forgot-password').post( validate(emailValidation, validationSource.BODY), forgotPasswordRequest )
+router.route('/:forgotPasswordToken/reset-forgot-password').post( validate(resetPasswordValidation, validationSource.BODY), resetForgotPassword )
 
 //Secured Route
 router.route('/logout').post(verifyJWT, logoutUser)

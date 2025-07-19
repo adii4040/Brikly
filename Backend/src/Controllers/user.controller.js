@@ -199,7 +199,7 @@ const forgotPasswordRequest = asyncHandler(async (req, res) => {
         subject: "Reset Your Password",
         mailgenContent: forgotPasswordReqMailGen(
             user.fullname,
-            `${process.env.BASE_URL}/user/reset-forgot-password/${hashedToken}`
+            `http://localhost:5173/user/${hashedToken}/reset-forgot-password`
         )
     }
 
@@ -302,6 +302,7 @@ const updateUser = asyncHandler(async (req, res) => {
         user.emailVerificationToken = hashedToken
         user.emailVerificationTokenExpiry = hashedTokenExpiry
         await user.save({ validateBeforeSave: false })
+        const userId = user._id.toString()
         const mailOptions = {
             from: "brickly@gmail.com",
             to: user.email,

@@ -83,7 +83,7 @@ function Login() {
 
 
         <div className='pt-5 flex justify-between text-white '>
-          <h1 >Forget Password?</h1>
+          <h1 onClick={() => navigate('/user/request-forgot-password')}>Forget Password?</h1>
           <p>Dont have an account? <Link to={'/signup'} className='text-blue-500'>SIGN UP</Link> </p>
         </div>
 

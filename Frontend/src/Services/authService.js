@@ -1,4 +1,4 @@
-import { registerUrl, loginUrl, currentUrl, logoutUrl, resendVerificationUrl } from "./routes"
+import { registerUrl, loginUrl, currentUrl, logoutUrl, resendVerificationUrl, requestForgotPasswordUrl } from "./routes"
 
 
 const registerUser = async (formData) => {
@@ -127,6 +127,26 @@ const updatePassword = async (updatePasswordUrl, formData) => {
     return data
 }
 
+const requestForgotPassword = async (formData) => {
+    const res = await fetch(requestForgotPasswordUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData),
+        credentials: "include"
+    })
+    const contentType = res.headers.get("content-type")
+    if (!res.ok) {
+        const errorData = contentType && contentType.includes('application/json') ? await res.json() : { error: await res.text() }
+        console.error('❌ Backend error:', errorData.message)
+        throw new Error(errorData.message || "Request Failed")
+    }
+    const data = await res.json()
+    return data
+}
+
+
 
 
 
@@ -137,5 +157,6 @@ export {
     logoutUser,
     resendVerificationEmail,
     updateUser,
-    updatePassword
+    updatePassword,
+    requestForgotPassword
 }

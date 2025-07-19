@@ -7,7 +7,9 @@ import Profile from './Profile'
 import UpdateUser from "./UpdateUser"
 import AddPost from "./AddPost"
 import VerifyEmail from "./VerifyEmail"
-import ResetPassword from "./ResetPassword"
+import ChangeCurrentPassword from "./ChangeCurrentPassword"
+import RequestForgotPassword from "./RequestForgotPassword"
+import ResetForgotPassword from "./ResetForgotPassword"
 
 export {
     Home,
@@ -19,5 +21,7 @@ export {
     UpdateUser,
     AddPost,
     VerifyEmail,
-    ResetPassword
+    ChangeCurrentPassword,
+    RequestForgotPassword,
+    ResetForgotPassword
 }

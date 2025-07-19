@@ -34,6 +34,7 @@ function Profile() {
     onSuccess: (data) => {
       console.log(data.message || "Email Verification code has been sent!")
       queryClient.invalidateQueries({ queryKey: ["currentUser"] })
+      alert(data.message || "Email Verification code has been sent!")
 
     },
     onError: (error) => {

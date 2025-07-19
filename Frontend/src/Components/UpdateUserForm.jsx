@@ -38,6 +38,7 @@ function UpdateUserForm() {
         },
         onError: (error) => {
             console.error("Error updating user:", error);
+            alert(error.message);
         }
     })
 
