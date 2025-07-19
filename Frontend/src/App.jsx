@@ -1,7 +1,6 @@
-import { Route, Routes, Navigate } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import Layout from './Components/Layout'
-import { Home, Login, Signup, Single, List, Profile, Update, AddPost } from './Pages/index'
-import { useFetchCurrentUser } from './hooks/useFetchCurrentUser';
+import { Home, Login, Signup, Single, List, Profile, UpdateUser, AddPost, VerifyEmail, ResetPassword } from './Pages/index'
 
 
 function App() {
@@ -16,10 +15,13 @@ function App() {
           <Route path='/list' element={<List />} />
           <Route path='/:id' element={<Single />} />
           <Route path='/user/profile' element={<Profile />} />
-          <Route path='/user/update' element={  <Update />} />
+          <Route path='/user/:id/verify-email/:token' element={<VerifyEmail />} />
+
           <Route path='/user/add-post' element={<AddPost />} />
         </Route>
 
+        <Route path='/user/:id/update' element={<UpdateUser />} />
+        <Route path='/user/:id/reset-password' element={<ResetPassword />} />
         <Route path='/login' element={<Login />} />
         <Route path='/Signup' element={<Signup />} />
       </Routes>

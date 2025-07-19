@@ -5,11 +5,9 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import logo from '../../../public/logo.png'
 
 import { logoutUser } from '../../Services/authService'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { useSelector } from 'react-redux'
+import { useMutation } from '@tanstack/react-query'
 import { useFetchCurrentUser } from '../../hooks/useFetchCurrentUser';
 function Nav() {
-  //const { userData, isLoggedIn } = useSelector((state) => state.auth)
 
   const navigate = useNavigate()
   const [menuBar, setMenuBar] = useState(false)
@@ -17,15 +15,8 @@ function Nav() {
 
   const { data: userData, isLoading, isError } = useFetchCurrentUser();
 
-  const isLoggedIn = !!userData; // or more explicitly: user !== null
-
-
-  //const { data: userData } = useQuery({ queryKey: ["currentUser"] })
-  console.log("userData", userData?.data?.user)
+  const isLoggedIn = !!userData; 
   const user = userData?.data?.user
-
-  console.log(user)
-  console.log(isLoggedIn)
 
   const logoutUserMutation = useMutation({
     mutationFn: async () => {
@@ -42,8 +33,6 @@ function Nav() {
       throw new Error(error)
     }
   })
-
-
 
   const toggleMenuBar = () => {
     setMenuBar(prev => !prev)
@@ -81,7 +70,7 @@ function Nav() {
       <div className='w-full relative z-99 h-20 flex  justify-between px-5 md:px-0'>
         <div className="left flex items-center gap-14">
           <div>
-            <Link to={"/"} className='text-4xl font-bold flex items-baseline gap-2 hover:scale-105 transition-all duration-300 ease-in-out'> <img src={logo} alt="logo" className='inline-block w-8 md:w-14 lg:w-8 ' /> <h1 className='hidden font-semibold text-2xl lg:block '>Brikly</h1></Link>
+            <Link to={"/"} className='text-4xl font-bold flex items-baseline gap-2 '> <img src={logo} alt="logo" className='inline-block w-8 md:w-14 lg:w-8 ' /> <h1 className='hidden font-semibold text-2xl lg:block '>Brikly</h1></Link>
           </div>
 
           <div className='hidden md:flex gap-10'>

@@ -1,14 +1,18 @@
-import {useQuery} from '@tanstack/react-query'
-import {fetchCurrentUser} from '../Services/authService'
-import { useDispatch } from 'react-redux';
-import { getCurrentUser } from '../features/authSlice';
+import { useQuery } from '@tanstack/react-query'
+import { fetchCurrentUser } from '../Services/authService'
 
 const useFetchCurrentUser = () => {
     return useQuery({
         queryKey: ["currentUser"],
         queryFn: fetchCurrentUser,
         retry: false,
-        staleTime: 1000 * 60 * 5,
+        staleTime:0,
+        refetchInterval: (data) => {
+            if (data?.data?.user?.isEmailVerified) {
+                return 5000 
+            }
+            return false
+        }
     })
 }
 

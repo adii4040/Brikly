@@ -57,7 +57,7 @@ const registerUser = asyncHandler(async (req, res) => {
         subject: "Email Verification",
         mailgenContent: emailVerificationMailGen(
             user.fullname,
-            `${process.env.BASE_URL}/user/verify-email/${hashedToken}`
+            `http://localhost:5173/user/${userId}/verify-email/${hashedToken}`
         )
     }
     sendMail(mailOptions)
@@ -271,7 +271,7 @@ const updateUser = asyncHandler(async (req, res) => {
     const { id } = req.params
     console.log(id, req.user._id.toString())
     if (id !== req.user._id.toString()) throw new ApiError(403, "Unauthorized request!!")
-        
+
     const { fullname, email } = req.body
 
     if (!fullname && !email && !req.file) throw new ApiError(400, "Atleast one field is required to update!!")
@@ -308,7 +308,8 @@ const updateUser = asyncHandler(async (req, res) => {
             subject: "Verify Your Email",
             mailgenContent: emailVerificationMailGen(
                 user.fullname,
-                `${process.env.BASE_URL}/user/verify-email/${hashedToken}`)
+                `http://localhost:5173/user/${userId}/verify-email/${hashedToken}`
+            )
         }
         sendMail(mailOptions)
     }

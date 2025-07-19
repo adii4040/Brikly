@@ -4,8 +4,11 @@ import Signup from './Signup'
 import Single from './Single'
 import List from './List'
 import Profile from './Profile'
-import Update from "./Update"
+import UpdateUser from "./UpdateUser"
 import AddPost from "./AddPost"
+import VerifyEmail from "./VerifyEmail"
+import ResetPassword from "./ResetPassword"
+
 export {
     Home,
     Login,
@@ -13,6 +16,8 @@ export {
     Single,
     List,
     Profile,
-    Update,
-    AddPost
+    UpdateUser,
+    AddPost,
+    VerifyEmail,
+    ResetPassword
 }
