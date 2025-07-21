@@ -23,13 +23,13 @@ router.route('/register').post( upload.single("avatar") , validate(registerUserV
 router.route('/login').post(validate(loginUserValidation, validationSource.BODY), loginUser)
 router.route('/:id/verify-email/:emailVerificationToken').get( verifyEmail)
 router.route('/request-forgot-password').post( validate(emailValidation, validationSource.BODY), forgotPasswordRequest )
-router.route('/:forgotPasswordToken/reset-forgot-password').post( validate(resetPasswordValidation, validationSource.BODY), resetForgotPassword )
+router.route('/:forgotPasswordToken/reset-forgot-password').put( validate(resetPasswordValidation, validationSource.BODY), resetForgotPassword )
 
 //Secured Route
 router.route('/logout').post(verifyJWT, logoutUser)
 router.route('/current-user').get(verifyJWT, getCurrentUser)
 router.route('/resend-email-verification').post(verifyJWT, resendEmailVerification)
-router.route('/:id/reset-password').post(verifyJWT, validate(resetPasswordValidation, validationSource.BODY), resetCurrentPassword)
-router.route('/:id/update').post(verifyJWT, upload.single("avatar"), validate(updateUserValidation, validationSource.BODY), updateUser)
+router.route('/:id/reset-password').put(verifyJWT, validate(resetPasswordValidation, validationSource.BODY), resetCurrentPassword)
+router.route('/:id/update').put(verifyJWT, upload.single("avatar"), validate(updateUserValidation, validationSource.BODY), updateUser)
 
 export default router

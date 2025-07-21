@@ -12,7 +12,7 @@ function ChangeCurrentPassword() {
 
   const { data: userData } = useFetchCurrentUser();
   const currentUser = userData?.data.user
-  const updatePasswordUrl = `/api/v1/user/${currentUser?._id}/reset-password`;
+  const updatePasswordUrl = `http://localhost:8000/api/v1/user/${currentUser?._id}/reset-password`;
 
   const queryClient = useQueryClient()
   const updatePasswordMutaion = useMutation({

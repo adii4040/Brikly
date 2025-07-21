@@ -92,7 +92,7 @@ const resendVerificationEmail = async () => {
 
 const updateUser = async (updateUserUrl,  formData) => {
     const res = await fetch(updateUserUrl, {
-        method: 'POST',
+        method: 'PUT',
         body: formData,
         credentials: "include"
     })
@@ -109,7 +109,7 @@ const updateUser = async (updateUserUrl,  formData) => {
 
 const updatePassword = async (updatePasswordUrl, formData) => {
     const res = await fetch(updatePasswordUrl, {
-        method: 'POST',
+        method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },

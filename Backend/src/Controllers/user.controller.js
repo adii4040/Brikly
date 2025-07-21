@@ -51,6 +51,7 @@ const registerUser = asyncHandler(async (req, res) => {
     user.emailVerificationTokenExpiry = hashedTokenExpiry
     await user.save({ validateBeforeSave: false })
 
+    const userId = user._id.toString()
     const mailOptions = {
         from: "bricky@gmail.com",
         to: user.email,
@@ -64,7 +65,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
     return res.status(201).json(
         new ApiResponse(
-            200,
+            201,
             { user: createdUser },
             "User registered successfully!!"
         )

@@ -16,13 +16,13 @@ app.use(cookieParser())
 //import the routes here
 import healtCheckRoute from './Routes/healthCheck.route.js'
 import userRoutes from './Routes/user.route.js'
-
+import postRoutes from './Routes/post.route.js'
 
 
 
 app.use('/api/v1/healthcheck', healtCheckRoute)
 app.use('/api/v1/user', userRoutes)
-
+app.use('/api/v1/post', postRoutes)
 
 // Global error handler (must come after all routes)
 app.use((err, req, res, next) => {

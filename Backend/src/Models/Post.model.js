@@ -13,30 +13,49 @@ const PostSchema = new Schema({
         required: true,
         trim: true
     },
-    images: {
-        type: [
-            {
-                url: {
-                    type: String,
-                    required: true,
-                    trim: true
-                }
+    images: [
+        {
+            url: {
+                type: String,
+                required: true,
+                trim: true
             }
-        ]
-    },
+        }
+
+    ],
     price: {
         type: Number,
         required: true,
     },
     address: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    city: {
-        type: String,
-        required: true,
-        trim: true
+        type: {
+            landmark: {
+                type: String,
+                required: true
+            },
+            city: {
+                type: String,
+                required: true
+            },
+            state: {
+                type: String,
+                required: true
+            },
+            pincode: {
+                type: Number,
+                trim: true,
+                required: true
+            },
+            latitude: {
+                type: Number,
+                required: true
+            },
+            longitude: {
+                type: Number,
+                required: true
+            }
+        },
+        required: true
     },
     bedrooms: {
         type: Number,
@@ -46,21 +65,14 @@ const PostSchema = new Schema({
         type: Number,
         required: true,
     },
-    latitude: {
-        type: Number,
-        required: true,
-    },
-    longitude: {
-        type: Number,
-        required: true,
-    },
-    type: {
+
+    propertyType: {
         type: String,
         required: true,
         enum: AvailablePropertyType,
         default: PropertyTypeEnum.APARTMENT
     },
-    property: {
+    propertyStatus: {
         type: String,
         required: true,
         enum: AvailablePropertyStatus,
