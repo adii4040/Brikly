@@ -62,13 +62,34 @@ function SinglePageRight() {
                     </div>
                 </div>
             </div>
-            <div className='nearby w-full lg:h-[10vh] mt-5 '>
+            <div className='nearby w-full lg:min-h-[10vh] mt-5 '>
                 <h1 className='text-base font-semibold'>Nearby Places</h1>
-                <div className='w-full  flex justify-between mt-5 p-3 bg-white text-black rounded-md '>
+                <div className='w-full h-full  flex justify-between flex-wrap gap-5 mt-5 p-3 bg-white text-black rounded-md '>
                     <div className='flex items-center gap-2'>
                         <img src={school} alt="utility" className='w-5 h-5' />
                         <div>
                             <h1 className='font-semibold text-sm leading-tight'>School</h1>
+                            <p className='text-xs m-0'>250m away</p>
+                        </div>
+                    </div>
+                    <div className='flex items-center gap-2'>
+                        <img src={bus} alt="pet" className='w-5 h-5' />
+                        <div>
+                            <h1 className='font-semibold text-sm leading-tight'>Hospital</h1>
+                            <p className='text-xs m-0'>100m away</p>
+                        </div>
+                    </div>
+                    <div className='flex items-center gap-2'>
+                        <img src={restaurant} alt="fee" className='w-5 h-5' />
+                        <div>
+                            <h1 className='font-semibold text-sm leading-tight'>Restaurant</h1>
+                            <p className='text-xs m-0'>200m away</p>
+                        </div>
+                    </div>
+                    <div className='flex items-center gap-2'>
+                        <img src={school} alt="utility" className='w-5 h-5' />
+                        <div>
+                            <h1 className='font-semibold text-sm leading-tight'>Railway Station</h1>
                             <p className='text-xs m-0'>250m away</p>
                         </div>
                     </div>
@@ -82,7 +103,7 @@ function SinglePageRight() {
                     <div className='flex items-center gap-2'>
                         <img src={restaurant} alt="fee" className='w-5 h-5' />
                         <div>
-                            <h1 className='font-semibold text-sm leading-tight'>Restaurant</h1>
+                            <h1 className='font-semibold text-sm leading-tight'>Airport</h1>
                             <p className='text-xs m-0'>200m away</p>
                         </div>
                     </div>

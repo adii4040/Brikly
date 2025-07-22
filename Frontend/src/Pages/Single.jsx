@@ -56,7 +56,7 @@ function Single() {
         </div>
       </div>
 
-      <div className="right w-full lg:w-[40%] h-full flex flex-col bg-[#fcf5f3] px-5  lg:overflow-y-auto">
+      <div className="right w-full lg:w-[40%] h-full flex flex-col bg-[#fcf5f3] px-5  lg:overflow-y-auto scrollbar-hide">
         <SinglePageRight/>
       </div>
     </div>

@@ -1,10 +1,10 @@
-import Post from '../Models/Post.model.js'
-import { asyncHandler, ApiError, ApiResponse, uploadOnCloudinary } from '../Utils/index.js'
-import { PropertyStatusEnum, PropertyTypeEnum } from '../Utils/Constants.js'
-
 import fs from 'fs'
 import mongoose from 'mongoose'
-import { validate } from '../Middlewares/validate.middleware.js'
+
+import Post from '../Models/Post.model.js'
+import { asyncHandler, ApiError, ApiResponse, uploadOnCloudinary } from '../Utils/index.js'
+import PostDetail from '../Models/PostDetails.model.js'
+
 
 
 const fileValidation = (files) => {
@@ -44,7 +44,19 @@ const createPost = asyncHandler(async (req, res) => {
         bedrooms,
         bathrooms,
         propertyType,
-        propertyStatus
+        propertyStatus,
+        //Post Extra Details
+        description,
+        utilityPolicy,
+        petPolicy,
+        incomePolicy,
+        size,
+        schoolDist,
+        hospitalDist,
+        restaurantDist,
+        railwayStationDist,
+        busStopDist,
+        airportDist
     } = req.body
 
 
@@ -80,14 +92,42 @@ const createPost = asyncHandler(async (req, res) => {
 
     })
 
+
     if (!post) throw new ApiError((401, "Error creating post, please try again!"))
 
+    const postDetails = await PostDetail.create({
+        postId: new mongoose.Types.ObjectId(post._id),
+        description,
+        generalPolicy: {
+            utilityPolicy,
+            petPolicy,
+            incomePolicy
+        },
+        roomSizes: {
+            size,
+            bedrooms,
+            bathrooms
+        },
+        nearByPlacesDistanace: {
+            schoolDist,
+            hospitalDist,
+            restaurantDist,
+            railwayStationDist,
+            busStopDist,
+            airportDist
+        }
+    })
     const createdPost = await Post.findById(post._id).populate("postedBy", "fullname email avatar isEmailVerified")
 
     return res.status(201).json(
         new ApiResponse(
             201,
-            { post: createdPost },
+            {
+                post: {
+                    createdPost,
+                    postDetails
+                }
+            },
             "Post created successfully"
         )
     )
@@ -113,12 +153,18 @@ const getPostById = asyncHandler(async (req, res) => {
     const { postId } = req.params
 
     const post = await Post.findById(postId).populate("postedBy", "fullname email avatar isEmailVerified")
-    if (!post) throw new ApiError(404, "No post found!")
+    const postDetails = await PostDetail.findOne({ postId })
+    if (!post && !postDetails) throw new ApiError(404, "No post found!")
 
     return res.status(200).json(
         new ApiResponse(
             200,
-            { post },
+            {
+                post: {
+                    post,
+                    postDetails
+                }
+            },
             "Post fetched successfully!!"
         )
     )
@@ -142,7 +188,19 @@ const updatePost = asyncHandler(async (req, res) => {
         bedrooms,
         bathrooms,
         propertyType,
-        propertyStatus
+        propertyStatus,
+        //Post Extra Details
+        description,
+        utilityPolicy,
+        petPolicy,
+        incomePolicy,
+        size,
+        schoolDist,
+        hospitalDist,
+        restaurantDist,
+        railwayStationDist,
+        busStopDist,
+        airportDist
     } = req.body
 
     const post = await Post.findOne({
@@ -152,44 +210,49 @@ const updatePost = asyncHandler(async (req, res) => {
 
     if (!post) throw new ApiError(401, "Unauthorized Request!")
 
+    const postDetails = await PostDetail.findOne({ postId })
+    if (!postDetails) throw new ApiError(401, "Unauthorized Request!")
+
     if (title) {
-        post.title = title   
+        post.title = title
     }
     if (price) {
-        post.price = price   
+        post.price = price
     }
     if (landmark) {
-        post.address.landmark = landmark   
+        post.address.landmark = landmark
     }
     if (city) {
-        post.address.city = city  
+        post.address.city = city
     }
     if (state) {
-        post.address.state = state   
+        post.address.state = state
     }
     if (pincode) {
-        post.address.pincode = pincode    
+        post.address.pincode = pincode
     }
     if (latitude) {
-        post.address.latitude = latitude  
+        post.address.latitude = latitude
     }
     if (longitude) {
-        post.address.longitude = longitude   
+        post.address.longitude = longitude
     }
     if (bedrooms) {
-        post.bedrooms = bedrooms   
+        post.bedrooms = bedrooms
+        postDetails.roomSizes.bedrooms = bedrooms
     }
     if (bathrooms) {
-        post.bathrooms = bathrooms  
+        post.bathrooms = bathrooms
+        postDetails.roomSizes.bathrooms = bathrooms
     }
     if (propertyType) {
-        post.propertyType = propertyType   
+        post.propertyType = propertyType
     }
     if (propertyStatus) {
-        post.propertyStatus = propertyStatus   
+        post.propertyStatus = propertyStatus
     }
 
-    if(req.files && req.files.length > 0) {
+    if (req.files && req.files.length > 0) {
         const localFiles = fileValidation(req.files)
 
         if (!localFiles) throw new ApiError(409, "Property images are required!!")
@@ -200,17 +263,60 @@ const updatePost = asyncHandler(async (req, res) => {
         const cloudinaryImagesUrl = cloudinaryImages.map((image) => ({ "url": image.url }))
 
         post.images = cloudinaryImagesUrl
-        
+
     }
 
-    await post.save({validateBeforeSave: true})
+    //for post details
+
+    if (description) {
+        postDetails.description = description
+    }
+    if (utilityPolicy) {
+        postDetails.generalPolicy.utilityPolicy = utilityPolicy
+    }
+    if (petPolicy) {
+        postDetails.generalPolicy.petPolicy = petPolicy
+    }
+    if (incomePolicy) {
+        postDetails.generalPolicy.incomePolicy = incomePolicy
+    }
+    if (size) {
+        postDetails.roomSizes.size = size
+    }
+    if (schoolDist) {
+        postDetails.nearByPlacesDistanace.schoolDist = schoolDist
+    }
+    if (hospitalDist) {
+        postDetails.nearByPlacesDistanace.hospitalDist = hospitalDist
+    }
+    if (restaurantDist) {
+        postDetails.nearByPlacesDistanace.restaurantDist = restaurantDist
+    }
+    if (railwayStationDist) {
+        postDetails.nearByPlacesDistanace.railwayStationDist = railwayStationDist
+    }
+    if (busStopDist) {
+        postDetails.nearByPlacesDistanace.busStopDist = busStopDist
+    }
+    if (airportDist) {
+        postDetails.nearByPlacesDistanace.airportDist = airportDist
+    }
+
+    await post.save({ validateBeforeSave: true })
+    await postDetails.save({ validateBeforeSave: true })
 
     const updatedPost = await Post.findById(post._id).populate("postedBy", "fullname email avatar isEmailVerified")
+    const updatedPostDetails = await PostDetail.findById(postDetails._id)
 
     return res.status(200).json(
         new ApiResponse(
             200,
-            { post: updatedPost },
+            {
+                post: {
+                    updatedPost,
+                    updatedPostDetails
+                }
+            },
             "Post updated successfully!!"
         )
     )
@@ -223,11 +329,13 @@ const deletePost = asyncHandler(async (req, res) => {
 
     const post = await Post.findOne({
         _id: postId,
-        postedBy: req.user._id,
+        postedBy: req.user?._id,
     })
+
     if (!post) throw new ApiError(401, "Unauthorized Request!")
 
     await Post.findByIdAndDelete(post._id)
+    await PostDetail.findOneAndDelete({ postId: post._id })
 
     return res.status(200).json(
         new ApiResponse(
