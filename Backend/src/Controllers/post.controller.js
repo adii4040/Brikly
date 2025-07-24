@@ -136,7 +136,27 @@ const createPost = asyncHandler(async (req, res) => {
 
 
 const getPosts = asyncHandler(async (req, res) => {
-    const allPosts = await Post.find({}).populate("postedBy", "fullname email avatar isEmailVerified")
+    console.log(req.query)
+    const allowedFilter = ['city', 'state', 'propertyStatus', 'propertyType', 'bedrooms',]
+    let filter = {};
+
+    allowedFilter.forEach((key) => {
+        if (req.query[key] !== undefined) {
+            if (key === 'city' || key === 'state') {
+                if (!filter.address) {
+                    filter[`address.${key}`] = { $regex: req.query[key], $options: "i" }
+                }
+            }
+            else {
+                filter[key] = isNaN(req.query[key]) ? { $regex: req.query[key], $options: "i" } : parseInt(req.query[key])
+            }
+        }
+    })
+
+
+    console.log("filter:", filter)
+
+    const allPosts = await Post.find(filter).populate("postedBy", "fullname email avatar isEmailVerified")
     if (!allPosts.length) throw new ApiError(404, "No post found!")
 
     return res.status(200).json(

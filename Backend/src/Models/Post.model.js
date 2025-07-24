@@ -1,5 +1,6 @@
 import mongoose, { Schema } from 'mongoose'
 import { AvailablePropertyStatus, PropertyStatusEnum, AvailablePropertyType, PropertyTypeEnum } from '../Utils/Constants.js'
+import { ApiError } from '../Utils/ApiError.utils.js'
 
 
 const PostSchema = new Schema({
@@ -81,6 +82,24 @@ const PostSchema = new Schema({
 
 }, {
     timestamps: true
+})
+
+const toTitleCase = (str) => {
+    return str
+        .toLowerCase()
+        .replace(/\b\w/g, char => char.toUpperCase())
+}
+PostSchema.pre("save", async function (next) {
+    const post = this
+    if (!post.isModified("address")) return next()
+
+    if (post.address?.city) {
+        post.address.city = toTitleCase(post.address.city)
+    }
+    if (post.address?.state) {
+        post.address.state = toTitleCase(post.address.state)
+    }
+    next()
 })
 
 const Post = new mongoose.model('Post', PostSchema)
