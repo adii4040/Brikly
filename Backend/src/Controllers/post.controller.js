@@ -1,9 +1,11 @@
 import fs from 'fs'
 import mongoose from 'mongoose'
+import jwt from 'jsonwebtoken'
 
 import Post from '../Models/Post.model.js'
 import { asyncHandler, ApiError, ApiResponse, uploadOnCloudinary } from '../Utils/index.js'
 import PostDetail from '../Models/PostDetails.model.js'
+import SavedPost from '../Models/SavedPost.model.js'
 
 
 
@@ -186,13 +188,31 @@ const getPostById = asyncHandler(async (req, res) => {
     const postDetails = await PostDetail.findOne({ postId })
     if (!post && !postDetails) throw new ApiError(404, "No post found!")
 
+
+    let userId;
+    const token = req.cookies?.accessToken
+    if (!token) {
+        userId = null
+    } else {
+        const decodedData = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY)
+        userId = decodedData._id
+    }
+
+    const saved = userId ? await SavedPost.findOne({
+        savedPostId: postId,
+        savedBy: userId
+    }) : null
+
+    const isSaved = userId ? !!saved : undefined   // if user is loged out, isSaved will be undefined and if user has saved the post saved = {...} therefore !!saved = truthy and if post is not saved, saved will be null therefore !!!saved or !!null = falsy
+
     return res.status(200).json(
         new ApiResponse(
             200,
             {
                 post: {
                     post,
-                    postDetails
+                    postDetails,
+                    ...(isSaved !== undefined && {isSaved}) // only add if logged in
                 }
             },
             "Post fetched successfully!!"
@@ -377,11 +397,56 @@ const deletePost = asyncHandler(async (req, res) => {
 
 })
 
+const savePost = asyncHandler(async (req, res) => {
+    const { postId } = req.body
+    if (!mongoose.Types.ObjectId.isValid(postId)) {
+        throw new ApiError(400, "Invalid Post ID")
+    }
+
+    const savedPost = await SavedPost.findOne({
+        savedPostId: postId,
+        savedBy: req.user._id
+    })
+
+    if (savedPost) {
+        await SavedPost.findOneAndDelete({
+            savedPostId: postId,
+            savedBy: req.user._id
+        })
+
+        return res.status(200).json(
+            new ApiResponse(
+                200,
+                {},
+                "Post removed from the saved list."
+            )
+        )
+    } else {
+        const savepost = await SavedPost.create({
+            savedPostId: postId,
+            savedBy: req.user._id
+        })
+
+        const savedPost = await SavedPost.findById(savepost._id).populate("savedPostId", "title images price address").populate("savedBy", "fullname email avatar isEmailVerified")
+
+        return res.status(201).json(
+            new ApiResponse(
+                20,
+                { savedPost },
+                "Post saved."
+            )
+        )
+    }
+})
+
+
+
 
 export {
     createPost,
     getPosts,
     getPostById,
     updatePost,
-    deletePost
+    deletePost,
+    savePost,
 }

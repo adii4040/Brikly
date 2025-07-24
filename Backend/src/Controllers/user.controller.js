@@ -1,3 +1,4 @@
+import SavedPost from '../Models/SavedPost.model.js'
 import User from '../Models/User.model.js'
 import { asyncHandler, ApiError, ApiResponse, uploadOnCloudinary, sendMail, emailVerificationMailGen, forgotPasswordReqMailGen, cookieOption, } from '../Utils/index.js'
 
@@ -364,6 +365,17 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
         )
 })
 
+
+
+const getSavedPosts = asyncHandler(async (req, res) => {
+    const savedPosts = await SavedPost.find({ savedBy: req.user._id })
+        .populate("savedPostId", "title images price address")
+        .sort({ createdAt: -1 })
+
+    if (!savedPosts.length) return res.status(200).json(new ApiResponse(200, { savedPosts: [] }, "No saved posts yet."))
+
+    return res.status(200).json(new ApiResponse(200, { savedPosts }, "Saved posts fetched."))
+})
 export {
     registerUser,
     loginUser,
@@ -374,5 +386,6 @@ export {
     forgotPasswordRequest,
     resetForgotPassword,
     resetCurrentPassword,
-    updateUser
+    updateUser,
+    getSavedPosts
 }
