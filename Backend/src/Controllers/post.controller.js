@@ -136,8 +136,7 @@ const createPost = asyncHandler(async (req, res) => {
 
 
 const getPosts = asyncHandler(async (req, res) => {
-    console.log(req.query)
-    const allowedFilter = ['city', 'state', 'propertyStatus', 'propertyType', 'bedrooms',]
+    const allowedFilter = ['city', 'state', 'propertyStatus', 'propertyType', 'bedrooms', 'maxPrice', 'minPrice']
     let filter = {};
 
     allowedFilter.forEach((key) => {
@@ -147,14 +146,25 @@ const getPosts = asyncHandler(async (req, res) => {
                     filter[`address.${key}`] = { $regex: req.query[key], $options: "i" }
                 }
             }
+            else if (key === 'minPrice' || key === 'maxPrice') {
+                const min = parseInt(req.query.minPrice)
+                const max = parseInt(req.query.maxPrice)
+                if (req.query.maxPrice && req.query.minPrice && min > max) throw new ApiError(400, "Max price should be greater than Min price")
+
+                if (req.query.minPrice && isNaN(min)) throw new ApiError(400, "Invalid minPrice value")
+                if (req.query.maxPrice && isNaN(max)) throw new ApiError(400, "Invalid maxPrice value")
+                filter.price = {
+                    $gte: req.query.minPrice ? min : 0,
+                    $lte: req.query.maxPrice ? max : Number.MAX_SAFE_INTEGER
+                }
+            }
             else {
                 filter[key] = isNaN(req.query[key]) ? { $regex: req.query[key], $options: "i" } : parseInt(req.query[key])
             }
         }
     })
 
-
-    console.log("filter:", filter)
+    //console.log("filter:", filter)
 
     const allPosts = await Post.find(filter).populate("postedBy", "fullname email avatar isEmailVerified")
     if (!allPosts.length) throw new ApiError(404, "No post found!")
