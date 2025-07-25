@@ -16,7 +16,7 @@ import chat from '../../public/chat.png'
 import Map from '../Components/Map'
 
 
-function SinglePageRight() {
+function SinglePageRight({postDetails}) {
     return (
         <div >
             <div className='general w-full lg:h-[25vh] pt-5 lg:pt-0'>
@@ -25,22 +25,22 @@ function SinglePageRight() {
                     <div className='flex items-center gap-2'>
                         <img src={utility} alt="utility" className='w-5 h-5 bg-orange-300/50' />
                         <div className='line-'>
-                            <h1 className='font-semibold text-sm leading-tight'>Utilities</h1>
-                            <p className='text-xs m-0'>Renter is responsible</p>
+                            <h1 className='font-semibold text-sm leading-tight'>Utility Policy</h1>
+                            <p className='text-xs m-0'>{postDetails?.generalPolicy?.utilityPolicy}</p>
                         </div>
                     </div>
                     <div className='flex items-center gap-2'>
                         <img src={pet} alt="pet" className='w-5 h-5 bg-orange-300/50' />
                         <div>
                             <h1 className='font-semibold text-sm leading-tight'>Pet Policy</h1>
-                            <p className='text-xs m-0'>Pets Allowed</p>
+                            <p className='text-xs m-0'>{postDetails?.generalPolicy?.petPolicy}</p>
                         </div>
                     </div>
                     <div className='flex items-center gap-2'>
                         <img src={fee} alt="fee" className='w-5 h-5 bg-orange-300/50' />
                         <div>
-                            <h1 className='font-semibold text-sm leading-tight'>Property Fees</h1>
-                            <p className='text-xs m-0'>Must have 3x the rent in total household income</p>
+                            <h1 className='font-semibold text-sm leading-tight'>Income Policy</h1>
+                            <p className='text-xs m-0'>{postDetails?.generalPolicy?.incomePolicy}</p>
                         </div>
                     </div>
                 </div>
@@ -50,15 +50,15 @@ function SinglePageRight() {
                 <div className='flex justify-between  mt-5'>
                     <div className="size  p-1 flex items-center gap-1 bg-white">
                         <img src={size} alt="size" className='w-5 h-5' />
-                        <p className='text-xs lg:font-semibold'>80sq (861sqft)</p>
+                        <p className='text-xs lg:font-semibold'>{postDetails?.roomSizes?.size}sqft</p>
                     </div>
                     <div className="size  p-1 flex items-center gap-1 bg-white">
                         <img src={bed} alt="size" className='w-5 h-5' />
-                        <p className='text-xs lg:font-semibold'>2 bed</p>
+                        <p className='text-xs lg:font-semibold'>{postDetails?.roomSizes?.bedrooms} bed</p>
                     </div>
                     <div className="size  p-1 flex items-center gap-1 bg-white">
                         <img src={bath} alt="size" className='w-5 h-5' />
-                        <p className='text-xs lg:font-semibold'>1 bathroom</p>
+                        <p className='text-xs lg:font-semibold'>{postDetails?.roomSizes?.bathrooms} bathroom</p>
                     </div>
                 </div>
             </div>
@@ -69,42 +69,42 @@ function SinglePageRight() {
                         <img src={school} alt="utility" className='w-5 h-5' />
                         <div>
                             <h1 className='font-semibold text-sm leading-tight'>School</h1>
-                            <p className='text-xs m-0'>250m away</p>
+                            <p className='text-xs m-0'>{postDetails?.nearByPlacesDistanace?.schoolDist >= 1000 ? (postDetails?.nearByPlacesDistanace?.schoolDist)/1000 : postDetails?.nearByPlacesDistanace?.schoolDist }km away</p>
                         </div>
                     </div>
                     <div className='flex items-center gap-2'>
                         <img src={bus} alt="pet" className='w-5 h-5' />
                         <div>
                             <h1 className='font-semibold text-sm leading-tight'>Hospital</h1>
-                            <p className='text-xs m-0'>100m away</p>
+                            <p className='text-xs m-0'>{postDetails?.nearByPlacesDistanace?.hospitalDist >= 1000 ? (postDetails?.nearByPlacesDistanace?.hospitalDist)/1000 : postDetails?.nearByPlacesDistanace?.hospitalDist }km away</p>
                         </div>
                     </div>
                     <div className='flex items-center gap-2'>
                         <img src={restaurant} alt="fee" className='w-5 h-5' />
                         <div>
                             <h1 className='font-semibold text-sm leading-tight'>Restaurant</h1>
-                            <p className='text-xs m-0'>200m away</p>
+                            <p className='text-xs m-0'>{postDetails?.nearByPlacesDistanace?.restaurantDist >= 1000 ? (postDetails?.nearByPlacesDistanace?.restaurantDist)/1000 : postDetails?.nearByPlacesDistanace?.restaurantDist }km away</p>
                         </div>
                     </div>
                     <div className='flex items-center gap-2'>
                         <img src={school} alt="utility" className='w-5 h-5' />
                         <div>
                             <h1 className='font-semibold text-sm leading-tight'>Railway Station</h1>
-                            <p className='text-xs m-0'>250m away</p>
+                            <p className='text-xs m-0'>{postDetails?.nearByPlacesDistanace?.schoolDist >= 1000 ? (postDetails?.nearByPlacesDistanace?.schoolDist)/1000 : postDetails?.nearByPlacesDistanace?.schoolDist }km away</p>
                         </div>
                     </div>
                     <div className='flex items-center gap-2'>
                         <img src={bus} alt="pet" className='w-5 h-5' />
                         <div>
                             <h1 className='font-semibold text-sm leading-tight'>Bus Stop</h1>
-                            <p className='text-xs m-0'>100m away</p>
+                            <p className='text-xs m-0'>{postDetails?.nearByPlacesDistanace?.busStopDist >= 1000 ? (postDetails?.nearByPlacesDistanace?.busStopDist)/1000 : postDetails?.nearByPlacesDistanace?.busStopDist }km away</p>
                         </div>
                     </div>
                     <div className='flex items-center gap-2'>
                         <img src={restaurant} alt="fee" className='w-5 h-5' />
                         <div>
                             <h1 className='font-semibold text-sm leading-tight'>Airport</h1>
-                            <p className='text-xs m-0'>200m away</p>
+                            <p className='text-xs m-0'>{postDetails?.nearByPlacesDistanace?.airportDist >= 1000 ? (postDetails?.nearByPlacesDistanace?.airportDist)/1000 : postDetails?.nearByPlacesDistanace?.airportDist }km away</p>
                         </div>
                     </div>
                 </div>

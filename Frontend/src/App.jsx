@@ -13,7 +13,7 @@ function App() {
           <Route path='/' element={<Home />} />
           <Route path='/home' element={<Home />} />
           <Route path='/list' element={<List />} />
-          <Route path='/:id' element={<Single />} />
+          <Route path='/post/:postId' element={<Single />} />
           <Route path='/user/profile' element={<Profile />} />
           <Route path='/user/:id/verify-email/:token' element={<VerifyEmail />} />
 

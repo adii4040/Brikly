@@ -1,4 +1,4 @@
-import { addPostUrl } from './routes'
+import { addPostUrl, getAllPostUrl } from './routes'
 
 const addPost = async (formData) => {
     try {
@@ -22,6 +22,32 @@ const addPost = async (formData) => {
     }
 }
 
-export  {
-    addPost
+const fetchAllPosts = async () => {
+    const res = await fetch(getAllPostUrl, {
+        method: "Get",
+        credentials: "include"
+    })
+
+    if (!res.ok) throw new Error("Failed to fetch all the posts")
+
+    const data = await res.json()
+    return data
+}
+
+const fetchPostById = async (getPostByIdUrl) => {
+    const res = await fetch(getPostByIdUrl, {
+        method: 'Get',
+        credentials: "include"
+    })
+
+    if (!res.ok) throw new Error("Failed to fetch the posts")
+
+    const data = await res.json()
+    return data
+}
+
+export {
+    addPost,
+    fetchAllPosts,
+    fetchPostById
 }

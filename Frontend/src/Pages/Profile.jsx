@@ -10,6 +10,8 @@ import { useFetchCurrentUser } from '../hooks/useFetchCurrentUser'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { resendVerificationEmail } from '../Services/authService'
 
+import {useFetchAllPosts} from '../hooks/useFetchPost'
+
 function Profile() {
   const data = listData
   const navigate = useNavigate()
@@ -19,12 +21,16 @@ function Profile() {
 
   const isLoggedIn = !!userData; // or more explicitly: user !== null
 
-  
+
   const currentUser = userData?.data?.user
   console.log(currentUser)
-  
-  
-  
+
+
+  const { data: allPosts } = useFetchAllPosts()
+  console.log(allPosts?.data?.posts)
+  const allPostArr = allPosts?.data?.posts
+
+
   //Resend Email Verification Code
   const resendEmailVerifcationMutation = useMutation({
     mutationFn: async () => {
@@ -75,11 +81,11 @@ function Profile() {
             <h1 className='text-3xl'>My List</h1>
             <button className='bg-orange-400 text-xs px-5 hover:bg-orange-300 rounded-sm '><Link to={'/user/add-post'}>Add New Post</Link></button>
           </div>
-          <div className='lg:max-h-[60vh] mt-5 pb-5 overflow-y-auto scrollbar-hide'>
+          <div className='lg:max-h-[60vh] mt-5 pb-16 overflow-y-auto scrollbar-hide'>
             {
-              data?.map((item) => (
-                <div key={item.id} className=''>
-                  <Apartment item={item} />
+              allPostArr?.map((post) => (
+                <div key={post._id} className=''>
+                  <Apartment post={post} />
                 </div>
               ))
             }
