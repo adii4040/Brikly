@@ -53,15 +53,6 @@ export const postValidation = z.object({
 
 
     //More post details...
-    description: z
-        .string()
-        .trim()
-        .min(50, {
-            message: "Description should be more than 50 charachters!!"
-        })
-        .max(300, {
-            message: "Description should be not exceed 300 charachters!!"
-        }),
 
     utilityPolicy: z.enum(AvailableUtilityPolicy, {
         message: `Invalid property status, can only select between ${AvailableUtilityPolicy}`
@@ -71,7 +62,7 @@ export const postValidation = z.object({
         message: `Invalid property status, can only select between ${AvailablePetPolicy}`
     }),
 
-    incomePolicy: z.string().trim(),
+    incomePolicy: z.string().trim().min(1, {message: "Income Policy is required!"}),
 
     size: z.coerce.number().refine(val => val > 0, {
         message: "Size of the house missing!"
@@ -101,6 +92,15 @@ export const postValidation = z.object({
         message: "Airport distance is missing"
     }),
 
+    description: z
+        .string()
+        .trim()
+        .min(50, {
+            message: "Description should be more than 50 charachters!!"
+        })
+        .max(300, {
+            message: "Description should be not exceed 300 charachters!!"
+        }),
 
 
 });

@@ -12,7 +12,7 @@ import { validateObjectId } from '../Middlewares/validate.middleware.js';
 const router = Router();
 
 
-router.route('/create-post').post(verifyToken, upload.array('postImages', 4), validate(postValidation, validationSource.BODY), createPost);
+router.route('/create-post').post(verifyToken, upload.array('propertyImages', 4), validate(postValidation, validationSource.BODY), createPost);
 router.route('/get-posts').get(getPosts);
 router.route('/:postId/get-post').get(validateObjectId("postId"), getPostById);
 router.route('/:postId/update-post').put(verifyToken, validateObjectId("postId"), upload.array('postImages', 4), validate(postUpdateValidation, validationSource.BODY), updatePost);

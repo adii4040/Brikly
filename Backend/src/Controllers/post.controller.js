@@ -95,7 +95,9 @@ const createPost = asyncHandler(async (req, res) => {
     })
 
 
-    if (!post) throw new ApiError((401, "Error creating post, please try again!"))
+    if (!post) {
+        throw new ApiError((401, "Error creating post, please try again!"))
+    } 
 
     const postDetails = await PostDetail.create({
         postId: new mongoose.Types.ObjectId(post._id),
@@ -212,7 +214,7 @@ const getPostById = asyncHandler(async (req, res) => {
                 post: {
                     post,
                     postDetails,
-                    ...(isSaved !== undefined && {isSaved}) // only add if logged in
+                    ...(isSaved !== undefined && { isSaved }) // only add if logged in
                 }
             },
             "Post fetched successfully!!"
