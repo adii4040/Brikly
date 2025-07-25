@@ -5,13 +5,38 @@
 @tailwind utilities;
 
 
-body{
+body {
     @apply font-sans;
     /* overflow: hidden; */
 }
 
-.own{
+.own {
     align-self: flex-end;
     text-align: right;
 }
 
+.ql-toolbar {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+/* Add black border to Quill editor */
+.custom-quill .ql-container {
+    height: 300px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+/* Typing area */
+.custom-quill .ql-editor {
+    min-height: 250px;
+    padding: 10px;
+    overflow-y: auto;
+
+}
+
+/* Reduce space between editor and address section */
+.custom-quill {
+    margin-bottom: 1rem;
+    /* Reduce spacing below the editor */
+}
