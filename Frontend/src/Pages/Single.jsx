@@ -6,9 +6,11 @@ import pin from '../../public/pin.png'
 import { useParams } from 'react-router-dom'
 import { fetchPostById } from '../Services/postService'
 import { useQuery } from '@tanstack/react-query'
+
 function Single() {
 
   const params = useParams()
+
 
 
 
@@ -28,6 +30,9 @@ function Single() {
 
 
   //console.log(data?.data?.post.post.images)
+  //console.log(data?.data?.post?.isSaved)
+
+  const isSaved = data?.data?.post?.isSaved
   const post = data?.data?.post.post
   const postDetails = data?.data?.post.postDetails
 
@@ -54,6 +59,8 @@ function Single() {
 
     //console.log("Inside",imgSrc)
   }
+
+
   return (
     <div className='w-full h-contentheight flex flex-col gap-10 md:gap-0  lg:flex-row overflow-y-scroll lg:overflow-y-visible'>
       <div className="left w-full lg:w-[60%] h-full px-5 md:px-0 lg:pr-10 flex flex-col lg:overflow-y-auto">
@@ -90,7 +97,7 @@ function Single() {
       </div>
 
       <div className="right w-full lg:w-[40%] h-full flex flex-col bg-[#fcf5f3] px-5  lg:overflow-y-auto scrollbar-hide">
-        <SinglePageRight postDetails={postDetails} />
+        <SinglePageRight post={post} postDetails={postDetails} isSaved={isSaved} />
       </div>
     </div>
   )

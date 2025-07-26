@@ -47,10 +47,12 @@ const fetchCurrentUser = async () => {
     })
 
 
+    const data = await res.json()
     if (!res.ok) {
-        throw new Error('Failed to fetch user');
+        throw new Error(data.message);
+    } else {
+        return data;
     }
-    return res.json();
 }
 
 const logoutUser = async () => {
@@ -90,7 +92,7 @@ const resendVerificationEmail = async () => {
     return data
 }
 
-const updateUser = async (updateUserUrl,  formData) => {
+const updateUser = async (updateUserUrl, formData) => {
     const res = await fetch(updateUserUrl, {
         method: 'PUT',
         body: formData,

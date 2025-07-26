@@ -97,7 +97,7 @@ const createPost = asyncHandler(async (req, res) => {
 
     if (!post) {
         throw new ApiError((401, "Error creating post, please try again!"))
-    } 
+    }
 
     const postDetails = await PostDetail.create({
         postId: new mongoose.Types.ObjectId(post._id),
@@ -140,6 +140,30 @@ const createPost = asyncHandler(async (req, res) => {
 
 
 const getPosts = asyncHandler(async (req, res) => {
+
+    // let isSaved;
+    // if (req.body) {
+    //     const { postId } = req.body
+
+    //     let userId
+    //     const token = req.cookies?.accessToken
+    //     if (!token) {
+    //         userId = null
+    //     } else {
+    //         const decodedUserData = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY)
+    //         if (!decodedUserData) userId = null
+    //         userId = decodedUserData._id
+    //     }
+
+    //     const saved = await SavedPost.findOne({
+    //         savedPostId: postId,
+    //         savedBy: userId
+    //     })
+
+    //     isSaved = userId ? !!saved : undefined
+    //}
+
+
     const allowedFilter = ['city', 'state', 'propertyStatus', 'propertyType', 'bedrooms', 'maxPrice', 'minPrice']
     let filter = {};
 
@@ -168,15 +192,27 @@ const getPosts = asyncHandler(async (req, res) => {
         }
     })
 
-    //console.log("filter:", filter)
 
     const allPosts = await Post.find(filter).populate("postedBy", "fullname email avatar isEmailVerified")
     if (!allPosts.length) throw new ApiError(404, "No post found!")
 
+
+    // console.log(isSaved)
+    // const posts = allPosts.map((post) => {
+    //     if (post._id.toString() === postId) {
+    //         const plainObject = post.toObject()
+    //         return {
+    //             ...plainObject,
+    //             ...(isSaved !== undefined && { isSaved })
+    //         }
+    //     } else return post
+    // })
+
     return res.status(200).json(
         new ApiResponse(
             200,
-            { posts: allPosts },
+            // { posts: { posts } },
+            { posts:  allPosts },
             "All posts fetched successfully"
         )
     )

@@ -7,8 +7,9 @@ import {useFetchAllPosts} from '../hooks/useFetchPost.js'
 function List() {
 
   const {data: allPosts} = useFetchAllPosts()
-  console.log(allPosts?.data?.posts)
+  //console.log(allPosts?.data?.posts)
   const allPostArr = allPosts?.data?.posts
+
   return (
     <div className='w-full h-contentheight px-5 md:px-0 flex flex-col lg:flex-row overflow-y-scroll lg:overflow-hidden'>
       <div className="left w-full   lg:w-[60%] lg:pr-10">

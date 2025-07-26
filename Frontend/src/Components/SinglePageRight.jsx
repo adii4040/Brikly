@@ -13,10 +13,36 @@ import save from '../../public/save.png'
 import chat from '../../public/chat.png'
 
 
+import { savePost } from '../Services/postService'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+
 import Map from '../Components/Map'
 
 
-function SinglePageRight({postDetails}) {
+function SinglePageRight({ post, postDetails, isSaved }) {
+
+
+
+    const queryClient = useQueryClient()
+    
+    const savePostMutation = useMutation({
+        mutationFn: async (postId) => {
+            const data = await savePost(postId)
+            return data
+        },
+        onSuccess: (data) => {
+            console.log(data)
+            queryClient.refetchQueries({queryKey: ["postById"]})
+        },
+        onError: (err) => {
+            console.log(err)
+        }
+    })
+
+    const savePostFn = (postId) => {
+        savePostMutation.mutate(postId)
+    }
+
     return (
         <div >
             <div className='general w-full lg:h-[25vh] pt-5 lg:pt-0'>
@@ -69,58 +95,58 @@ function SinglePageRight({postDetails}) {
                         <img src={school} alt="utility" className='w-5 h-5' />
                         <div>
                             <h1 className='font-semibold text-sm leading-tight'>School</h1>
-                            <p className='text-xs m-0'>{postDetails?.nearByPlacesDistanace?.schoolDist >= 1000 ? (postDetails?.nearByPlacesDistanace?.schoolDist)/1000 : postDetails?.nearByPlacesDistanace?.schoolDist }km away</p>
+                            <p className='text-xs m-0'>{postDetails?.nearByPlacesDistanace?.schoolDist >= 1000 ? (postDetails?.nearByPlacesDistanace?.schoolDist) / 1000 : postDetails?.nearByPlacesDistanace?.schoolDist}km away</p>
                         </div>
                     </div>
                     <div className='flex items-center gap-2'>
                         <img src={bus} alt="pet" className='w-5 h-5' />
                         <div>
                             <h1 className='font-semibold text-sm leading-tight'>Hospital</h1>
-                            <p className='text-xs m-0'>{postDetails?.nearByPlacesDistanace?.hospitalDist >= 1000 ? (postDetails?.nearByPlacesDistanace?.hospitalDist)/1000 : postDetails?.nearByPlacesDistanace?.hospitalDist }km away</p>
+                            <p className='text-xs m-0'>{postDetails?.nearByPlacesDistanace?.hospitalDist >= 1000 ? (postDetails?.nearByPlacesDistanace?.hospitalDist) / 1000 : postDetails?.nearByPlacesDistanace?.hospitalDist}km away</p>
                         </div>
                     </div>
                     <div className='flex items-center gap-2'>
                         <img src={restaurant} alt="fee" className='w-5 h-5' />
                         <div>
                             <h1 className='font-semibold text-sm leading-tight'>Restaurant</h1>
-                            <p className='text-xs m-0'>{postDetails?.nearByPlacesDistanace?.restaurantDist >= 1000 ? (postDetails?.nearByPlacesDistanace?.restaurantDist)/1000 : postDetails?.nearByPlacesDistanace?.restaurantDist }km away</p>
+                            <p className='text-xs m-0'>{postDetails?.nearByPlacesDistanace?.restaurantDist >= 1000 ? (postDetails?.nearByPlacesDistanace?.restaurantDist) / 1000 : postDetails?.nearByPlacesDistanace?.restaurantDist}km away</p>
                         </div>
                     </div>
                     <div className='flex items-center gap-2'>
                         <img src={school} alt="utility" className='w-5 h-5' />
                         <div>
                             <h1 className='font-semibold text-sm leading-tight'>Railway Station</h1>
-                            <p className='text-xs m-0'>{postDetails?.nearByPlacesDistanace?.schoolDist >= 1000 ? (postDetails?.nearByPlacesDistanace?.schoolDist)/1000 : postDetails?.nearByPlacesDistanace?.schoolDist }km away</p>
+                            <p className='text-xs m-0'>{postDetails?.nearByPlacesDistanace?.schoolDist >= 1000 ? (postDetails?.nearByPlacesDistanace?.schoolDist) / 1000 : postDetails?.nearByPlacesDistanace?.schoolDist}km away</p>
                         </div>
                     </div>
                     <div className='flex items-center gap-2'>
                         <img src={bus} alt="pet" className='w-5 h-5' />
                         <div>
                             <h1 className='font-semibold text-sm leading-tight'>Bus Stop</h1>
-                            <p className='text-xs m-0'>{postDetails?.nearByPlacesDistanace?.busStopDist >= 1000 ? (postDetails?.nearByPlacesDistanace?.busStopDist)/1000 : postDetails?.nearByPlacesDistanace?.busStopDist }km away</p>
+                            <p className='text-xs m-0'>{postDetails?.nearByPlacesDistanace?.busStopDist >= 1000 ? (postDetails?.nearByPlacesDistanace?.busStopDist) / 1000 : postDetails?.nearByPlacesDistanace?.busStopDist}km away</p>
                         </div>
                     </div>
                     <div className='flex items-center gap-2'>
                         <img src={restaurant} alt="fee" className='w-5 h-5' />
                         <div>
                             <h1 className='font-semibold text-sm leading-tight'>Airport</h1>
-                            <p className='text-xs m-0'>{postDetails?.nearByPlacesDistanace?.airportDist >= 1000 ? (postDetails?.nearByPlacesDistanace?.airportDist)/1000 : postDetails?.nearByPlacesDistanace?.airportDist }km away</p>
+                            <p className='text-xs m-0'>{postDetails?.nearByPlacesDistanace?.airportDist >= 1000 ? (postDetails?.nearByPlacesDistanace?.airportDist) / 1000 : postDetails?.nearByPlacesDistanace?.airportDist}km away</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div className='location w-full h-[25vh] mt-10 z-0'>
                 <h1 className='text-base font-semibold'>Location
-                    
-                   </h1>
+
+                </h1>
                 <div className='w-full h-[75%] mt-5'>
-                    <Map/>
+                    <Map />
                 </div>
             </div>
 
-            <div className='w-full flex justify-between mt-5'>
-                <button className='flex items-center gap-1 border border-yellow-300 text-xs bg-white p-3 rounded-md'> <img src={chat} alt="" className='w- h-3'/> Send a Message</button>
-                <button className='flex items-center gap-1 border border-yellow-300 text-xs bg-white p-3 rounded-md'> <img src={save} alt="" className='w-3 h-3'/> Save the Place</button>
+            <div className='w-full flex justify-between my-5'>
+                <button className='flex items-center gap-1 border border-yellow-300 text-xs bg-white p-3 rounded-md' > <img src={chat} alt="" className='w- h-3' /> Send a Message</button>
+                <button className={`flex items-center gap-1 border border-yellow-300 text-xs  p-3 rounded-md ${isSaved ? "bg-orange-300" : "bg-white"}`} onClick={() => savePostFn(post?._id)}> <img src={save} alt="" className='w-3 h-3' /> Save the Place</button>
             </div>
         </div>
     )

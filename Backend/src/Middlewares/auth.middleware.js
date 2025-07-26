@@ -16,7 +16,7 @@ const verifyJWT = asyncHandler(async (req, res, next) => {
         req.user = userData
         next()
     } catch (error) {
-        next(new ApiError(401, "No loged in user"))
+        next(new ApiError(401, "Please login first."))
     }
 })
 

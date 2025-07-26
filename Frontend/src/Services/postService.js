@@ -1,4 +1,4 @@
-import { addPostUrl, getAllPostUrl } from './routes'
+import { addPostUrl, getAllPostUrl, savePostUrl } from './routes'
 
 const addPost = async (formData) => {
     try {
@@ -46,8 +46,26 @@ const fetchPostById = async (getPostByIdUrl) => {
     return data
 }
 
+const savePost = async (postId) => {
+    const res = await fetch(savePostUrl, {
+        method: "Post",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({postId}),
+        credentials: "include"
+    })
+    const data = await res.json()
+    if (!res.ok) {
+        throw new Error(  data.message ||"Failed to save the posts")
+    } else {
+        return data
+    }
+}
+
 export {
     addPost,
     fetchAllPosts,
-    fetchPostById
+    fetchPostById,
+    savePost
 }

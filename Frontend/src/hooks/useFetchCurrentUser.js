@@ -12,7 +12,7 @@ const useFetchCurrentUser = () => {
                 return 5000 
             }
             return false
-        }
+        },
     })
 }
 

@@ -6,7 +6,29 @@ import save from '../../public/save.png'
 import chat from '../../public/chat.png'
 import { Link } from 'react-router-dom'
 
+import { savePost } from '../Services/postService'
+import { useMutation } from '@tanstack/react-query'
+
 function Apartment({ post }) {
+
+
+    const savePostMutation = useMutation({
+        mutationFn: async (postId) => {
+            const data = await savePost(postId)
+            return data
+        },
+        onSuccess: (data) => {
+            console.log(data)
+        },
+        onError: (err) => {
+            console.log(err)
+        }
+    })
+
+    const savePostFn = (postId) => {
+        savePostMutation.mutate(postId)
+        console.log(postId)
+    }
 
     return (
         <>
@@ -24,7 +46,7 @@ function Apartment({ post }) {
                     </div>
 
                     <div className='flex gap-2 absolute bottom-0 right-0'>
-                        <div className="bookmark border border-gray-600 rounded p-1"><img src={save} alt="save" className='w-3 h-3' /></div>
+                        <div className={`bookmark border border-gray-600  rounded p-1 ${savePostMutation.data?.message === "Post saved." && "bg-orange-300"}`}><img src={save} alt="save" className='w-3 h-3' onClick={() => savePostFn(post._id)} /></div>
                         <div className="contact border border-gray-600 rounded p-1 "><img src={chat} alt="chat" className='w-3 h-3' /></div>
                     </div>
                 </div>
