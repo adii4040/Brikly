@@ -5,6 +5,8 @@ import SearchBar from '../Components/SearchBar'
 
 function Home() {
 
+  
+
   return (
     <>
       <div className='w-full h-contentheight flex px-5 md:px-0 '>

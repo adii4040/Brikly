@@ -22,16 +22,27 @@ const addPost = async (formData) => {
     }
 }
 
-const fetchAllPosts = async () => {
-    const res = await fetch(getAllPostUrl, {
+const fetchAllPosts = async (filterParams = {}) => {
+    const url = new URL("http://localhost:8000/api/v1/post/get-posts")
+
+    Object.entries(filterParams).forEach(([key, value]) => {
+        if (value !== undefined && value !== "") {
+            url.searchParams.set(key, value)
+        }
+    })
+    console.log(url.toString())
+    const res = await fetch(url, {
         method: "Get",
         credentials: "include"
     })
 
-    if (!res.ok) throw new Error("Failed to fetch all the posts")
 
     const data = await res.json()
-    return data
+    if (!res.ok) {
+        throw new Error(data.message)
+    } else {
+        return data
+    }
 }
 
 const fetchPostById = async (getPostByIdUrl) => {
@@ -52,12 +63,12 @@ const savePost = async (postId) => {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({postId}),
+        body: JSON.stringify({ postId }),
         credentials: "include"
     })
     const data = await res.json()
     if (!res.ok) {
-        throw new Error(  data.message ||"Failed to save the posts")
+        throw new Error(data.message || "Failed to save the posts")
     } else {
         return data
     }
