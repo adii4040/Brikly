@@ -33,7 +33,8 @@ function UpdateUserForm() {
                 email: "",
                 avatar: null
             });
-            queryClient.refetchQueries({ queryKey: ['currentUser'] });
+            queryClient.invalidateQueries({ queryKey: ['currentUser'] });
+;
             navigate('/user/profile');
         },
         onError: (error) => {

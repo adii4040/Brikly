@@ -7,15 +7,17 @@ import logo from '../../../public/logo.png'
 import { logoutUser } from '../../Services/authService'
 import { useMutation } from '@tanstack/react-query'
 import { useFetchCurrentUser } from '../../hooks/useFetchCurrentUser';
+import { useQueryClient } from '@tanstack/react-query'
 function Nav() {
 
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const [menuBar, setMenuBar] = useState(false)
 
 
   const { data: userData, isLoading, isError } = useFetchCurrentUser();
 
-  const isLoggedIn = !!userData; 
+  const isLoggedIn = !!userData;
   const user = userData?.data?.user
 
   const logoutUserMutation = useMutation({
@@ -26,7 +28,8 @@ function Nav() {
 
     onSuccess: (data) => {
       console.log(data)
-      navigate('/login')
+      queryClient.setQueryData(["currentUser"], null)
+
     },
 
     onError: (error) => {
@@ -65,6 +68,7 @@ function Nav() {
       auth: isLoggedIn
     },
   ]
+
   return (
     <>
       <div className='w-full relative z-99 h-20 flex  justify-between px-5 md:px-0'>
