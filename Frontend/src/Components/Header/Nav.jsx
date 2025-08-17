@@ -28,6 +28,8 @@ function Nav() {
 
     onSuccess: (data) => {
       console.log(data)
+      queryClient.refetchQueries(["currentUser"])
+      navigate('/login')
       queryClient.setQueryData(["currentUser"], null)
 
     },

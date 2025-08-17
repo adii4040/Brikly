@@ -25,6 +25,7 @@ function Signup() {
 
     onSuccess: (data) => {
       console.log(data)
+      alert("Email verification link has been sent to your email.")
       setTimeout(() => {
         navigate('/login')
       }, 1500)
@@ -40,7 +41,7 @@ function Signup() {
     const { name, value, files } = e.target;
 
     if (name === "avatar") {
-      setForm({ ...form, avatar: files[0] });  // ✅ Correct usage
+      setForm({ ...form, avatar: files[0] }); 
     } else {
       setForm({ ...form, [name]: value });
     }

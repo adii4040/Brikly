@@ -11,7 +11,7 @@ function SearchBar() {
   const navigate = useNavigate()
 
   const [form, setForm] = useState({
-    propertyStatus: PropertyStatusEnum.BUY,
+    propertyStatus: "",
     city: "",
     minPrice: "",
     maxPrice: ""
@@ -44,7 +44,7 @@ function SearchBar() {
       <div className="type">
         {
           AvailablePropertyStatus.map((status) => (
-            <button key={status} onClick={() => toggleStatus(status)} className={`w-20 h-12  border border-b-0 ${status === "Buy" ? "rounded-tl-lg border-r-0" : "rounded-tr-lg border-l-0 "}  ${form.propertyStatus === status ? "bg-black text-white" : ""}`}>{status}</button>
+            <button key={status} onClick={() => toggleStatus(status)} className={`w-20 h-12  border border-b-0  ${status === "Buy" ? "rounded-tl-lg border-r-0" : "rounded-tr-lg border-l-0 "}  ${form.propertyStatus === status ? "bg-black text-white" : ""}`}>{status}</button>
           ))
         }
       </div>

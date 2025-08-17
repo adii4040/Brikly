@@ -8,9 +8,9 @@ function App() {
   const { data: userData, isLoading } = useFetchCurrentUser();
   const isLoggedIn = !!userData;
 
-  if (isLoading) {
-    return <Loader />;
-  }
+  // if (isLoading) {
+  //   return <Loader />;
+  // }
 
   return (
     <Routes>
