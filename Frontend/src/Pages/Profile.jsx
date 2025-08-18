@@ -10,7 +10,7 @@ import { useFetchCurrentUser } from '../hooks/useFetchCurrentUser'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { resendVerificationEmail } from '../Services/authService'
 
-import {useFetchAllPosts} from '../hooks/useFetchPost'
+import { useFetchAllPosts } from '../hooks/useFetchPost'
 
 function Profile() {
   const data = listData
@@ -23,11 +23,11 @@ function Profile() {
 
 
   const currentUser = userData?.data?.user
-  console.log(currentUser)
+  //console.log(currentUser)
 
 
   const { data: allPosts } = useFetchAllPosts()
-  console.log(allPosts?.data?.posts)
+  //console.log(allPosts?.data?.posts)
   const allPostArr = allPosts?.data?.posts
 
 
@@ -92,8 +92,9 @@ function Profile() {
           </div>
         </div>
       </div>
+
       <div className='right w-full lg:w-[40%] h-full bg-[#fcf5f3] px-5 lg:overflow-y-auto'>
-        <ChatContainer />
+        <ChatContainer currentUser={currentUser} />
       </div>
     </div>
 

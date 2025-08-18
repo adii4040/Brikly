@@ -35,6 +35,7 @@ function Single() {
   const isSaved = data?.data?.post?.isSaved
   const post = data?.data?.post.post
   const postDetails = data?.data?.post.postDetails
+  console.log(post?.postedBy)
 
 
   const [imgSrc, setImgSrc] = useState([])

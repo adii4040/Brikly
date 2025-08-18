@@ -1,5 +1,6 @@
-import  Message  from '../Models/Message.model.js'
+import Message from '../Models/Message.model.js'
 import User from '../Models/User.model.js'
+import Chat from '../Models/Chat.model.js'
 import { asyncHandler, ApiError, ApiResponse } from '../Utils/index.js'
 
 const createMessage = asyncHandler(async (req, res) => {
@@ -8,12 +9,26 @@ const createMessage = asyncHandler(async (req, res) => {
 
     if (!receiverId) throw new ApiError(401, 'No receiver id is provided.')
 
-    const senderId = req.user._id
+    const myId = req.user._id
     const message = await Message.create({
-        senderId,
+        senderId: myId,
         receiverId,
         text
     })
+    const existingChat = await Chat.findOne({
+        $or: [
+            { senderId: myId, receiverId },
+            { senderId: receiverId, receiverId: myId }
+        ]
+    })
+    if (!existingChat) {
+        await Chat.create({
+            senderId: myId,
+            receiverId
+        })
+    }
+
+
     const sendMessage = await Message.findById(message._id).populate("senderId", "fullname avatar").populate("receiverId", "fullname avatar")
 
     return res.status(201).json(
@@ -50,8 +65,30 @@ const getMessages = asyncHandler(async (req, res) => {
 })
 
 
+const getMyChats = asyncHandler(async (req, res) => {
+    const myId = req.user._id
+    const chats = await Chat.find({
+        $or: [
+            { senderId: myId },
+            { receiverId: myId }
+        ]
+    }).populate("senderId", "fullname avatar").populate("receiverId", "fullname avatar")
+
+    if (!chats.length) throw new ApiError(404, "You have no chats yet.")
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            { chats },
+            "All the chats are fetched successfully."
+        )
+    )
+})
+
+
 export {
     createMessage,
-    getMessages
+    getMessages,
+    getMyChats
 }
 

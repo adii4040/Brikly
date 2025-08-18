@@ -2,7 +2,45 @@ import React, { useState } from 'react'
 import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
-function ChatBox({ openChat, openChatBox, expandBox, expandChatBox }) {
+
+import { sendMessage } from '../Services/messageService'
+import { useMutation } from '@tanstack/react-query'
+
+function ChatBox({ openChat, openChatBox, expandBox, expandChatBox, postedBy }) {
+
+    const [text, setText] = useState(null)
+
+
+    const receiverId = postedBy?._id
+
+    const handlechange = (e) => {
+        setText(e.target.value)
+        console.log(text)
+
+    }
+    const sendMessageMutation = useMutation({
+        mutationFn: async ({formData}) => {
+            const data = await sendMessage(receiverId, formData)
+            return data
+        },
+        onSuccess: (data) => {
+            console.log(data)
+        },
+        onError: (error) => {
+            console.log(error)
+        }
+    })
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!text) {
+            console.error("Message cannot be empty");
+            return;
+        }
+        const formData = { text };
+        sendMessageMutation.mutate({ formData });
+        setText(''); // Clear the input after sending
+    }
 
 
 
@@ -10,8 +48,8 @@ function ChatBox({ openChat, openChatBox, expandBox, expandChatBox }) {
         <div className={` w-full h-full ${openChat ? "block" : "hidden"}`}>
             <div className='w-full h-14 bg-yellow-300 flex items-center justify-between gap-5 p-5'>
                 <div className='flex gap-5 items-center'>
-                    <img src="https://toppng.com/uploads/preview/cool-avatar-transparent-image-cool-boy-avatar-11562893383qsirclznyw.png" alt="" className='w-7 h-7 object-cover rounded-full' />
-                    <h1 className='text-sm font-semibold'>Aditya Singh</h1>
+                    <img src={`${postedBy?.avatar?.url}`} alt="" className='w-7 h-7 object-cover rounded-full' />
+                    <h1 className='text-sm font-semibold'>{postedBy?.fullname}</h1>
                 </div>
                 <div className='flex cursor-pointer'>
                     <div className='flex '>
@@ -52,9 +90,15 @@ function ChatBox({ openChat, openChatBox, expandBox, expandChatBox }) {
                 </div>
             </div>
 
-            <div className="send w-full h-14 flex border border-yellow-100">
-                <textarea name="" id="" className='w-full resize-none scrollbar-hide p-2' placeholder='Text...'></textarea>
-                <button className='w-36 bg-yellow-100' type='submit'>Send</button>
+            <div >
+                <form className="send w-full h-14 flex border border-yellow-100" onSubmit={handleSubmit}>
+                    <input type="text"
+                        name='text'
+                        className='w-full resize-none scrollbar-hide p-2' placeholder='Text...'
+                        value={text} onChange={handlechange}
+                    />
+                    <button className='w-36 bg-yellow-100' type='submit'>Send</button>
+                </form>
             </div>
 
         </div>

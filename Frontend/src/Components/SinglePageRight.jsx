@@ -13,6 +13,8 @@ import save from '../../public/save.png'
 import chat from '../../public/chat.png'
 
 
+import ChatBox from './ChatBox'
+
 import { savePost } from '../Services/postService'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
@@ -22,9 +24,17 @@ import Map from '../Components/Map'
 function SinglePageRight({ post, postDetails, isSaved }) {
 
 
+    const [openChat, setOpenChat] = React.useState(false)
+    console.log(post?.postedBy)
+
+    const postedBy = post?.postedBy
+    const openChatBox = () => {
+        console.log("open")
+        setOpenChat(prev => !prev)
+    }
 
     const queryClient = useQueryClient()
-    
+
     const savePostMutation = useMutation({
         mutationFn: async (postId) => {
             const data = await savePost(postId)
@@ -32,7 +42,7 @@ function SinglePageRight({ post, postDetails, isSaved }) {
         },
         onSuccess: (data) => {
             console.log(data)
-            queryClient.refetchQueries({queryKey: ["postById"]})
+            queryClient.refetchQueries({ queryKey: ["postById"] })
         },
         onError: (err) => {
             console.log(err)
@@ -44,7 +54,7 @@ function SinglePageRight({ post, postDetails, isSaved }) {
     }
 
     return (
-        <div >
+        <div className='relative'>
             <div className='general w-full lg:h-[25vh] pt-5 lg:pt-0'>
                 <h1 className='text-base font-semibold'>General</h1>
                 <div className='w-full lg:h-[78%] flex flex-col gap-3 mt-5 p-3 bg-white text-black rounded-md '>
@@ -144,8 +154,14 @@ function SinglePageRight({ post, postDetails, isSaved }) {
                 </div>
             </div>
 
+
+            {
+                openChat && <div className='absolute bottom-5 bg-white rounded-md mt-5'>
+                    <ChatBox openChat={openChat} openChatBox={() => setOpenChat(false)} expandBox={false} expandChatBox={() => { }}  postedBy={postedBy}/>
+                </div>
+            }
             <div className='w-full flex justify-between my-5'>
-                <button className='flex items-center gap-1 border border-yellow-300 text-xs bg-white p-3 rounded-md' > <img src={chat} alt="" className='w- h-3' /> Send a Message</button>
+                <button className='flex items-center gap-1 border border-yellow-300 text-xs bg-white p-3 rounded-md' onClick={openChatBox}> <img src={chat} alt="" className='w- h-3' /> Send a Message</button>
                 <button className={`flex items-center gap-1 border border-yellow-300 text-xs  p-3 rounded-md ${isSaved ? "bg-orange-300" : "bg-white"}`} onClick={() => savePostFn(post?._id)}> <img src={save} alt="" className='w-3 h-3' /> Save the Place</button>
             </div>
         </div>

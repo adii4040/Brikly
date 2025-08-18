@@ -18,6 +18,10 @@ const updatePostUrl = "/api/v1/post/:postId/update-post"
 const savePostUrl = "/api/v1/post/save"
 
 
+/*-------Message------*/
+const sendMessageUrl = "/api/v1/message/:receiverId/send-message"
+const getChatListUrl = "/api/v1/message/get-my-chats"
+
 
 export {
     registerUrl,
@@ -32,5 +36,8 @@ export {
     getPostByIdUrl,
     deletePostUrl,
     updatePostUrl,
-    savePostUrl
+    savePostUrl,
+
+    sendMessageUrl,
+    getChatListUrl
 }
