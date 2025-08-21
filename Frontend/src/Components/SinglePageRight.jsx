@@ -25,6 +25,7 @@ function SinglePageRight({ post, postDetails, isSaved }) {
 
 
     const [openChat, setOpenChat] = React.useState(false)
+    const [expandBox, setExpandBox] = React.useState(false)
     console.log(post?.postedBy)
 
     const postedBy = post?.postedBy
@@ -32,6 +33,10 @@ function SinglePageRight({ post, postDetails, isSaved }) {
         console.log("open")
         setOpenChat(prev => !prev)
     }
+
+    const expandChatBox = () => {
+        setExpandBox(prev => !prev);
+    };
 
     const queryClient = useQueryClient()
 
@@ -54,7 +59,7 @@ function SinglePageRight({ post, postDetails, isSaved }) {
     }
 
     return (
-        <div className='relative'>
+        <div className='relative '>
             <div className='general w-full lg:h-[25vh] pt-5 lg:pt-0'>
                 <h1 className='text-base font-semibold'>General</h1>
                 <div className='w-full lg:h-[78%] flex flex-col gap-3 mt-5 p-3 bg-white text-black rounded-md '>
@@ -156,8 +161,8 @@ function SinglePageRight({ post, postDetails, isSaved }) {
 
 
             {
-                openChat && <div className='absolute bottom-5 bg-white rounded-md mt-5'>
-                    <ChatBox openChat={openChat} openChatBox={() => setOpenChat(false)} expandBox={false} expandChatBox={() => { }}  postedBy={postedBy}/>
+                openChat && <div className={`absolute bottom-0 md:-bottom-48 lg:bottom-0  ${expandBox && "h-[65vh] lg:h-[75%]"} bg-white rounded-md mt-5`}>
+                    <ChatBox openChat={openChat} closeChatBox={() => setOpenChat(false)} expandBox={expandBox} expandChatBox={expandChatBox} postedBy={postedBy} />
                 </div>
             }
             <div className='w-full flex justify-between my-5'>

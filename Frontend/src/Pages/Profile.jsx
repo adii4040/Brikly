@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Apartment from '../Components/Apartment'
 import { listData } from '../lib/dummyData'
-import ChatContainer from '../Components/ChatContainer'
+import RoghtProfile from '../Components/RightProfile'
 
 
 import { useNavigate } from 'react-router-dom'
@@ -59,11 +59,13 @@ function Profile() {
     <div className='w-full h-contentheight px-5 md:px-0 flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden scrollbar-hide'>
       <div className='left w-full lg:w-[60%] lg:pr-10 '>
         <div className="userInfo w-full flex flex-col gap-10 ">
-          <div className='flex justify-between'>
-            <h1 className='text-3xl'>User Information</h1>
-            <button className='bg-orange-400 text-xs px-5 hover:bg-orange-300 rounded-sm '><Link to={`/user/${currentUser?._id}/update`}>Update Profile</Link></button>
+          <div className='flex justify-between flex-col md:flex-row gap-5'>
+            <h1 className='text-5xl lg:text-3xl'>User Information</h1>
+            <div className='flex justify-between gap-5'>
+              <button className='h-12 bg-orange-400 text-xs px-5 hover:bg-orange-300 rounded-sm '><Link to={`/user/${currentUser?._id}/update`}>Update Profile</Link></button>
 
-            <button className='bg-orange-400 text-xs px-5 hover:bg-orange-300 rounded-sm '><Link to={`/user/${currentUser?._id}/reset-password`}>Change Password</Link></button>
+              <button className='h-12 bg-orange-400 text-xs px-5 hover:bg-orange-300 rounded-sm '><Link to={`/user/${currentUser?._id}/reset-password`}>Change Password</Link></button>
+            </div>
           </div>
           <div className='infoContainer flex flex-col gap-3'>
             <p className='flex items-center gap-3 text-sm'>Avatar:<img src={currentUser ? currentUser?.avatar?.url : "https://toppng.com/uploads/preview/cool-avatar-transparent-image-cool-boy-avatar-11562893383qsirclznyw.png"} alt="" className='w-10 h-10 object-cover rounded-full' /></p>
@@ -94,7 +96,7 @@ function Profile() {
       </div>
 
       <div className='right w-full lg:w-[40%] h-full bg-[#fcf5f3] px-5 lg:overflow-y-auto'>
-        <ChatContainer currentUser={currentUser} />
+        <RoghtProfile currentUser={currentUser} />
       </div>
     </div>
 

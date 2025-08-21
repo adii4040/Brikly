@@ -6,12 +6,12 @@ import { RxCross2 } from "react-icons/rx";
 import { sendMessage } from '../Services/messageService'
 import { useMutation } from '@tanstack/react-query'
 
-function ChatBox({ openChat, openChatBox, expandBox, expandChatBox, postedBy }) {
+function ChatBox({ openChat, openChatBox, expandBox, closeChatBox, expandChatBox, postedBy, sender }) {
 
     const [text, setText] = useState(null)
 
 
-    const receiverId = postedBy?._id
+    const receiverId =  sender ? sender?._id : postedBy?._id
 
     const handlechange = (e) => {
         setText(e.target.value)
@@ -45,21 +45,21 @@ function ChatBox({ openChat, openChatBox, expandBox, expandChatBox, postedBy }) 
 
 
     return (
-        <div className={` w-full h-full ${openChat ? "block" : "hidden"}`}>
+        <div className='h-full transition-all duration-300  shadow-xl rounded-t-2xl overflow-hidden'>
             <div className='w-full h-14 bg-yellow-300 flex items-center justify-between gap-5 p-5'>
                 <div className='flex gap-5 items-center'>
-                    <img src={`${postedBy?.avatar?.url}`} alt="" className='w-7 h-7 object-cover rounded-full' />
-                    <h1 className='text-sm font-semibold'>{postedBy?.fullname}</h1>
+                    <img src={`${sender ? sender?.avatar?.url : postedBy?.avatar?.url}`} alt="" className='w-7 h-7 object-cover rounded-full' />
+                    <h1 className='text-sm font-semibold'>{sender ? sender?.fullname : postedBy?.fullname}</h1>
                 </div>
                 <div className='flex cursor-pointer'>
                     <div className='flex '>
                         <IoIosArrowDown className={`text-xl ${expandBox ? "block" : "hidden"} `} onClick={expandChatBox} />
                         <IoIosArrowUp className={`text-xl ${expandBox ? "hidden" : "block"} `} onClick={expandChatBox} />
                     </div>
-                    <RxCross2 className=' text-3xl ' onClick={openChatBox} />
+                    <RxCross2 className=' text-3xl ' onClick={closeChatBox} />
                 </div>
             </div>
-            <div className={`chatBox w-full  ${expandBox ? "h-[85%]" : "h-56"} flex flex-col gap-5 p-5 bg-slate-50  overflow-y-auto scrollbar-hide`}>
+            <div className={`chatBox w-full   ${expandBox ? "h-[77%] md:h-[85%] lg:h-[82%]" : "h-56"} flex flex-col gap-5 p-5 bg-slate-50  overflow-y-auto scrollbar-hide`}>
                 <div className="chatMessage w-[80%]  text-sm">
                     <p className='text-start'>Lorem, ipsum dolor sit amet Lorem ipsum do sit amet consectetur adipisicing elit. Perspiciatis, nulla! </p>
                     <span className='text-xs py-1 bg-orange-300/50'>1 hour ago</span>

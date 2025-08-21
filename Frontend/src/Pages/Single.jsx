@@ -66,7 +66,7 @@ function Single() {
     <div className='w-full h-contentheight flex flex-col gap-10 md:gap-0  lg:flex-row overflow-y-scroll lg:overflow-y-visible'>
       <div className="left w-full lg:w-[60%] h-full px-5 md:px-0 lg:pr-10 flex flex-col lg:overflow-y-auto">
         <div className="imageContainer w-full h-[45%] flex gap-5">
-          <div className='w-[70%] h-full rounded-lg overflow-hidden bg-slate-400'>
+          <div className='w-[70%] h-full rounded-lg overflow-hidden '>
             <img src={imgSrc[0]?.url} alt="" className='w-full h-full object-cover' />
           </div>
           <div className='w-[30%] h-full flex flex-col gap-2 '>
@@ -97,7 +97,7 @@ function Single() {
         </div>
       </div>
 
-      <div className="right w-full lg:w-[40%] h-full flex flex-col bg-[#fcf5f3] px-5  lg:overflow-y-auto scrollbar-hide">
+      <div className="right w-full lg:w-[40%] min-h-full flex flex-col bg-[#fcf5f3]  px-5 overflow-y-auto scrollbar-hide">
         <SinglePageRight post={post} postDetails={postDetails} isSaved={isSaved} />
       </div>
     </div>
