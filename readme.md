@@ -119,10 +119,6 @@ git clone https://github.com/adii4040/Brikly
 
 ### Installation  
 
-```bash
-# Clone the repository
-git clone https://github.com/your-username/brickly.git
-
 # Navigate to project folder
 cd brickly
 ```
