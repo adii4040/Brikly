@@ -3,8 +3,8 @@ import { fetchMessages, fetchChatList } from '../Services/messageService'
 
 export const useFetchMessages = (receiverId) => {
     return useQuery({
-        queryKey: ['get-messages'],
-        queryFn: fetchMessages,
+        queryKey: ['get-messages', receiverId],
+        queryFn: () => fetchMessages(receiverId),
 
     })
 }

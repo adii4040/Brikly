@@ -115,10 +115,6 @@ function Nav() {
                       {
                         NavList.map((nav) => nav.auth &&
                           <div key={nav.name} className='flex flex-col gap-5 items-start justify-end text-2xl text-white'>
-                            <div className='flex items-center gap-2'>
-                              <img src={user ? user?.avatar?.url : "https://toppng.com/uploads/preview/cool-avatar-transparent-image-cool-boy-avatar-11562893383qsirclznyw.png"} alt="" className='w-7 h-7 rounded-full' />
-                              <h1 className='text-base font-semibold hidden lg:block'>{user?.fullname}</h1>
-                            </div>
                             <NavLink to={nav.to} key={nav.name} >{nav.name}</NavLink>
                             <button className="bg-transparent" onClick={() => logoutUserMutation.mutate()}>Logout</button>
                           </div>
@@ -141,10 +137,6 @@ function Nav() {
                 {
                   NavList.map((nav) => nav.auth &&
                     <div key={nav.name} className='hidden md:flex gap-5 items-center justify-end text-base text-black lg:pr-5'>
-                      <div className='flex items-center gap-2'>
-                        <img src={user ? user?.avatar?.url : "https://toppng.com/uploads/preview/cool-avatar-transparent-image-cool-boy-avatar-11562893383qsirclznyw.png"} alt="" className='w-9 h-9 rounded-full object-cover' />
-                        <h1 className='text-base font-semibold hidden lg:block'>{user?.fullname}</h1>
-                      </div>
                       <NavLink to={nav.to} key={nav.name} >{nav.name}</NavLink>
                       <button className="p-1 bg-orange-300 rounded" onClick={() => logoutUserMutation.mutate()}>Logout</button>
                     </div>

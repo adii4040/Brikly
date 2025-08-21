@@ -1,8 +1,13 @@
 import React from 'react'
-import ChatBox from './ChatBox';
+import { useFetchMessages } from '../hooks/useFetchMessages';
 
-function ChatContainer({ otherUser, isOpen, expandBox, openChatBox, closeChatBox, expandChatBox, currentUser }) {
+function ChatContainer({ otherUser, isOpen, openChatBox }) {
   console.log("isOpen for", otherUser.fullname, "=>", isOpen)
+  const receiverId = otherUser?._id;
+  const { data: messages, isLoading, isError, error } = useFetchMessages(receiverId);
+  const messagesData = messages?.data?.messages || [];
+
+  const recentMessage = messagesData[messagesData.length - 1]?.text
 
   return (
     <div>
@@ -15,7 +20,7 @@ function ChatContainer({ otherUser, isOpen, expandBox, openChatBox, closeChatBox
           <img src={otherUser?.avatar?.url} alt="" className='w-10 h-10 object-cover rounded-full' />
           <div className='w-full overflow-hidden'>
             <h1 className='font-bold'>{otherUser?.fullname}</h1>
-            <p className='truncate text-sm'>First Message</p>
+            <p className='truncate text-sm font-medium text-slate-700'>{recentMessage}</p>
           </div>
         </div>
       </div>

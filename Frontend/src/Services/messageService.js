@@ -23,7 +23,7 @@ export const sendMessage = async (receiverId, formData) => {
 
 export const fetchMessages = async (receiverId) => {
     const res = await fetch(`/api/v1/message/${receiverId}/get-messages`, {
-        method: GET,
+        method: 'GET',
         credentials: "include"
     })
     const data = await res.json()
