@@ -1,4 +1,7 @@
 import { registerUrl, loginUrl, currentUrl, logoutUrl, resendVerificationUrl, requestForgotPasswordUrl } from "./routes"
+import { connectSocket, disconnectSocket } from "./socketService"
+
+let socket = null
 
 
 const registerUser = async (formData) => {
@@ -37,7 +40,11 @@ const loginUser = async (formData) => {
         throw new Error(errorData.message || "Login Failed")
     }
 
+
     const data = await res.json();
+
+    socket = connectSocket(data?.data?.user)
+
     return data
 }
 
@@ -71,6 +78,8 @@ const logoutUser = async () => {
     }
 
     const data = await res.json()
+    disconnectSocket(socket)
+
     return data
 }
 
